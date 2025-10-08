@@ -15,7 +15,7 @@ arithmeticMenu:Menu=Menu(menuBar,tearoff=0)
 menuBar.add_cascade(label="Arithmetic",menu=arithmeticMenu)
 arithmeticMenu.add_command(label="Addition",command=lambda:createOperationWindow(operation.addition))
 arithmeticMenu.add_command(label="Subtraction",command=lambda:createOperationWindow(operation.subtraction))
-arithmeticMenu.add_command(label="Multiplication")
+arithmeticMenu.add_command(label="Multiplication",command=createMultiplicationWindow)
 arithmeticMenu.add_command(label="Squaring")
 arithmeticMenu.add_command(label="Normalization")
 
