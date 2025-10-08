@@ -19,6 +19,8 @@ def addSignals():
         for signal in signalList:
             res+=signal.data[i]
         resultantSignal.data[i]=res
+    writeSignal(resultantSignal,signalCounter)
+    signalCounter+=1
 
 def subtractSignals():
     global signalList
@@ -34,6 +36,9 @@ def subtractSignals():
             else:
                 sub-=signal.data[i]
         resultantSignal.data[i]=sub
+    writeSignal(resultantSignal,signalCounter)
+    signalCounter+=1
+
 
 def multiplySignal(signal:SignalData,constant:float):
     resultantSignal:SignalData=SignalData()
@@ -42,6 +47,8 @@ def multiplySignal(signal:SignalData,constant:float):
     resultantSignal.N1=signal.N1
     for index in signal.data.keys():
         resultantSignal.data[index]=signal.data[index]*constant
+    writeSignal(resultantSignal,signalCounter)
+    signalCounter+=1
 
 def squareSignal(signal:SignalData):
     resultantSignal:SignalData=SignalData()
@@ -50,6 +57,8 @@ def squareSignal(signal:SignalData):
     resultantSignal.N1=signal.N1
     for index in signal.data.keys():
         resultantSignal.data[index]=signal.data[index]*signal.data[index]
+    writeSignal(resultantSignal,signalCounter)
+    signalCounter+=1
 
 def calculate(mode:operation):
     match mode:
