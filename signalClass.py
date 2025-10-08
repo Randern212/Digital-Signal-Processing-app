@@ -1,9 +1,9 @@
 class SignalData:
-    SignalType:bool
-    IsPeriodic:bool
-    N1:int
-    data:dict = {}
-
+    def __init__(self):
+        self.SignalType: bool = False
+        self.IsPeriodic: bool = False  
+        self.N1: int = 0
+        self.data: dict = {}
 
 # The file will contain the samples in time domain or frequency domain,
 # Follows is a description for how to build such a file:

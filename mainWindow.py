@@ -1,5 +1,5 @@
 from tkinter import *
-import buttonFunctions as btf
+from buttonFunctions import *
 from plotFunctions import *
 
 mainWindow = Tk()
@@ -15,16 +15,16 @@ pickSignal:Button=Button(mainWindow,
 targetedSignalEntry:Entry=Entry(mainWindow)
 
 discreteSignalButton:Button=Button(mainWindow,
-                                    command=lambda:discreteRepresentation(btf.targetSignals[int(targetedSignalEntry.get())]),
+                                    command=lambda:discreteRepresentation(targetSignals[int(targetedSignalEntry.get())]),
                                     text="Discrete Display",
                                     font=("times new roman", 8))
 
 ContinousSignalButton:Button=Button(mainWindow,
-                                    command=lambda:continousRepresentation(btf.targetSignals[int(targetedSignalEntry.get())]),
+                                    command=lambda:continousRepresentation(targetSignals[int(targetedSignalEntry.get())]),
                                     text="Continous Display",
                                     font=("times new roman", 8))
 
+pickSignal.pack()
 targetedSignalEntry.pack()
 discreteSignalButton.pack()
 ContinousSignalButton.pack()
-pickSignal.pack()
