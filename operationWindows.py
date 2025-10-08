@@ -8,19 +8,32 @@ signalList:list[SignalData]=[]
 class operation(Enum):
     addition=0
     subtraction=1
-    multiplication=2
 
 def addSignals():
     global signalList
     resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType = signalList[0].SignalType
+    resultantSignal.IsPeriodic = all(signal.IsPeriodic for signal in signalList)
     for i in max(signalList,key=lambda signal:signal.N1):
-        sum:float=0
+        res:float=0
         for signal in signalList:
-            sum+=signal.data[i]
-        resultantSignal.data[i]=sum
+            res+=signal.data[i]
+        resultantSignal.data[i]=res
 
 def subtractSignals():
-    pass
+    global signalList
+    resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType = signalList[0].SignalType
+    resultantSignal.IsPeriodic = all(signal.IsPeriodic for signal in signalList)
+    for i in max(signalList,key=lambda signal:signal.N1).N1:
+        sub:float = max(signalList,key=lambda signal:signal.data[i]).data[i]
+        index:int = signalList.index(max(signalList,key=lambda signal:signal.data[i]))
+        for signal in signalList:
+            if signalList.index(signal)==index:
+                continue
+            else:
+                sub-=signal.data[i]
+        resultantSignal.data[i]=sub
 
 def multiplySignals():
     pass
@@ -31,8 +44,6 @@ def calculate(mode:operation):
             addSignals()
         case operation.subtraction:
             subtractSignals()
-        case operation.multiplication:
-            multiplySignals()
 
 def createOperationWindow(mode:operation):
     global signalList
