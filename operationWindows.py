@@ -14,7 +14,7 @@ def addSignals():
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType = signalList[0].SignalType
     resultantSignal.IsPeriodic = all(signal.IsPeriodic for signal in signalList)
-    for i in max(signalList,key=lambda signal:signal.N1):
+    for i in range(max(signalList,key=lambda signal:signal.N1).N1):
         res:float=0
         for signal in signalList:
             res+=signal.data[i]
@@ -25,7 +25,7 @@ def subtractSignals():
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType = signalList[0].SignalType
     resultantSignal.IsPeriodic = all(signal.IsPeriodic for signal in signalList)
-    for i in max(signalList,key=lambda signal:signal.N1).N1:
+    for i in range(max(signalList,key=lambda signal:signal.N1).N1):
         sub:float = max(signalList,key=lambda signal:signal.data[i]).data[i]
         index:int = signalList.index(max(signalList,key=lambda signal:signal.data[i]))
         for signal in signalList:
@@ -53,13 +53,20 @@ def calculate(mode:operation):
 def createOperationWindow(mode:operation):
     global signalList
     operationWindow:Toplevel=Toplevel()
-    chosenSignal:Entry = Entry(operationWindow).pack()
-    pushButton:Button=Button(operationWindow,text="push signal",command=lambda:signalList.append(targetSignals[int(chosenSignal.get())])).pack()
-    calculateButton:Button=Button(operationWindow,text="Calculate",command=lambda:calculate(mode)).pack()
+    chosenSignal:Entry = Entry(operationWindow)
+    pushButton:Button=Button(operationWindow,text="push signal",command=lambda:signalList.append(targetSignals[int(chosenSignal.get())]))
+    calculateButton:Button=Button(operationWindow,text="Calculate",command=lambda:calculate(mode))
 
+    chosenSignal.pack()
+    pushButton.pack()
+    calculateButton.pack()
 
 def createMultiplicationWindow():
     multiplicationWindow=Toplevel()
-    constantEntry:Entry=Entry(multiplicationWindow).pack()
-    signalEntry:Entry=Entry(multiplicationWindow).pack()
-    multiplyButton:Button=Button(multiplicationWindow,text="multiply",command=lambda:multiplySignal(targetSignals[int(signalEntry.get(),constantEntry.get())])).pack()
+    constantEntry:Entry=Entry(multiplicationWindow)
+    signalEntry:Entry=Entry(multiplicationWindow)
+    multiplyButton:Button=Button(multiplicationWindow,text="multiply",command=lambda:multiplySignal(targetSignals[int(signalEntry.get(),constantEntry.get())]))
+
+    constantEntry.pack()
+    signalEntry.pack()
+    multiplyButton.pack()
