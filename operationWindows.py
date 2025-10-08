@@ -43,6 +43,14 @@ def multiplySignal(signal:SignalData,constant:float):
     for index in signal.data.keys():
         resultantSignal.data[index]=signal.data[index]*constant
 
+def squareSignal(signal:SignalData):
+    resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType=signal.SignalType
+    resultantSignal.IsPeriodic=signal.IsPeriodic
+    resultantSignal.N1=signal.N1
+    for index in signal.data.keys():
+        resultantSignal.data[index]=signal.data[index]*signal.data[index]
+
 def calculate(mode:operation):
     match mode:
         case operation.addition:
@@ -62,7 +70,7 @@ def createOperationWindow(mode:operation):
     calculateButton.pack()
 
 def createMultiplicationWindow():
-    multiplicationWindow=Toplevel()
+    multiplicationWindow:Toplevel=Toplevel()
     constantEntry:Entry=Entry(multiplicationWindow)
     signalEntry:Entry=Entry(multiplicationWindow)
     multiplyButton:Button=Button(multiplicationWindow,text="multiply",command=lambda:multiplySignal(targetSignals[int(signalEntry.get(),constantEntry.get())]))
@@ -70,3 +78,11 @@ def createMultiplicationWindow():
     constantEntry.pack()
     signalEntry.pack()
     multiplyButton.pack()
+
+def createSquaringWindow():
+    squaringWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(squaringWindow)
+    squaringButton:Button=Button(squaringWindow,text="Square Signal",command=lambda:squareSignal(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    squaringButton.pack()
