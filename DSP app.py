@@ -1,5 +1,4 @@
 from tkinter import *
-import matplotlib as plt
-import mainWindow
+from mainWindow import *
 
 mainWindow.mainloop()
