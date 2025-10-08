@@ -24,9 +24,8 @@ def readSignal(filePath:str)->SignalData:
     return returnSignal
 
 def writeSignal(signal: SignalData,index:int):
-    filePath:str="outputSignals//"
+    filePath:str="Signal"+str(index)+".txt"
     with open(filePath, 'w') as signalFile:
-        signalFile.name="Signal"+str(index)
         signalFile.write(f"{int(signal.SignalType)}\n")
         signalFile.write(f"{int(signal.IsPeriodic)}\n")
         signalFile.write(f"{signal.N1}\n")

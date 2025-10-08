@@ -11,6 +11,7 @@ class operation(Enum):
 
 def addSignals():
     global signalList
+    global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType = signalList[0].SignalType
     resultantSignal.IsPeriodic = all(signal.IsPeriodic for signal in signalList)
@@ -21,9 +22,11 @@ def addSignals():
         resultantSignal.data[i]=res
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
+    signalList=[]
 
 def subtractSignals():
     global signalList
+    global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType = signalList[0].SignalType
     resultantSignal.IsPeriodic = all(signal.IsPeriodic for signal in signalList)
@@ -38,9 +41,11 @@ def subtractSignals():
         resultantSignal.data[i]=sub
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
+    signalList=[]
 
 
 def multiplySignal(signal:SignalData,constant:float):
+    global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=signal.SignalType
     resultantSignal.IsPeriodic=signal.IsPeriodic
@@ -51,6 +56,7 @@ def multiplySignal(signal:SignalData,constant:float):
     signalCounter+=1
 
 def squareSignal(signal:SignalData):
+    global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=signal.SignalType
     resultantSignal.IsPeriodic=signal.IsPeriodic
@@ -61,6 +67,7 @@ def squareSignal(signal:SignalData):
     signalCounter+=1
 
 def accumulateSignal(signal:SignalData):
+    global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=signal.SignalType
     resultantSignal.IsPeriodic=signal.IsPeriodic
