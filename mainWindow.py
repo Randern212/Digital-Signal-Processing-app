@@ -8,7 +8,7 @@ mainWindow.title("Digital Signal Processing Application by Randern212")
 mainWindow.config(background="#2a3f5e")
 
 pickSignal:Button=Button(mainWindow,
-                          command= btf.submitFile,
+                          command= submitFile,
                           text="Choose signal file",
                             font=("times new roman", 12))
 
