@@ -2,7 +2,7 @@ class SignalData:
     SignalType:bool
     IsPeriodic:bool
     N1:int
-    sampleAmp:dict
+    data:dict
 
 
 # The file will contain the samples in time domain or frequency domain,
