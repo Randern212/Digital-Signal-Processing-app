@@ -18,7 +18,7 @@ arithmeticMenu.add_command(label="Subtraction",command=lambda:createOperationWin
 arithmeticMenu.add_command(label="Multiplication",command=createMultiplicationWindow)
 arithmeticMenu.add_command(label="Squaring",command=createSquaringWindow)
 arithmeticMenu.add_command(label="Normalization")
-arithmeticMenu.add_command(label="Accumulation")
+arithmeticMenu.add_command(label="Accumulation",command=createAccumulationWindow)
 
 generationMenu:Menu=Menu(menuBar,tearoff=0)
 menuBar.add_cascade(label="Generate",menu=generationMenu)
