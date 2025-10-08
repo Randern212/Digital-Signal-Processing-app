@@ -102,7 +102,7 @@ def createMultiplicationWindow():
     multiplicationWindow:Toplevel=Toplevel()
     constantEntry:Entry=Entry(multiplicationWindow)
     signalEntry:Entry=Entry(multiplicationWindow)
-    multiplyButton:Button=Button(multiplicationWindow,text="multiply",command=lambda:multiplySignal(targetSignals[int(signalEntry.get(),constantEntry.get())]))
+    multiplyButton:Button=Button(multiplicationWindow,text="multiply",command=lambda:multiplySignal(targetSignals[int(signalEntry.get())],float(constantEntry.get())))
 
     constantEntry.pack()
     signalEntry.pack()
