@@ -60,6 +60,19 @@ def squareSignal(signal:SignalData):
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
 
+def accumulateSignal(signal:SignalData):
+    resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType=signal.SignalType
+    resultantSignal.IsPeriodic=signal.IsPeriodic
+    resultantSignal.N1=signal.N1
+    resSum:float=0
+    for index in signal.data.keys():
+        resSum+=signal.data[index]
+        resultantSignal.data[index]=resSum
+    writeSignal(resultantSignal,signalCounter)
+    signalCounter+=1
+
+
 def calculate(mode:operation):
     match mode:
         case operation.addition:
@@ -95,3 +108,11 @@ def createSquaringWindow():
 
     signalEntry.pack()
     squaringButton.pack()
+
+def createAccumulationWindow():
+    accumulationWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(accumulationWindow)
+    accumulationButton:Button=Button(accumulationWindow,text="Square Signal",command=lambda:accumulateSignal(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    accumulationButton.pack()
