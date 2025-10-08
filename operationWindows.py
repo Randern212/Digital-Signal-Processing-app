@@ -35,8 +35,13 @@ def subtractSignals():
                 sub-=signal.data[i]
         resultantSignal.data[i]=sub
 
-def multiplySignals():
-    pass
+def multiplySignal(signal:SignalData,constant:float):
+    resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType=signal.SignalType
+    resultantSignal.IsPeriodic=signal.IsPeriodic
+    resultantSignal.N1=signal.N1
+    for index in signal.data.keys():
+        resultantSignal.data[index]=signal.data[index]*constant
 
 def calculate(mode:operation):
     match mode:
@@ -49,5 +54,12 @@ def createOperationWindow(mode:operation):
     global signalList
     operationWindow:Toplevel=Toplevel()
     chosenSignal:Entry = Entry(operationWindow).pack()
-    pushButton:Button=Button(operationWindow,text="push signal",command=lambda:signalList.append(targetSignals[int(chosenSignal.get())]))
+    pushButton:Button=Button(operationWindow,text="push signal",command=lambda:signalList.append(targetSignals[int(chosenSignal.get())])).pack()
     calculateButton:Button=Button(operationWindow,text="Calculate",command=lambda:calculate(mode)).pack()
+
+
+def createMultiplicationWindow():
+    multiplicationWindow=Toplevel()
+    constantEntry:Entry=Entry(multiplicationWindow).pack()
+    signalEntry:Entry=Entry(multiplicationWindow).pack()
+    multiplyButton:Button=Button(multiplicationWindow,text="multiply",command=lambda:multiplySignal(targetSignals[int(signalEntry.get(),constantEntry.get())])).pack()
