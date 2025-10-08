@@ -11,7 +11,8 @@ class SignalData:
 # [SignalType] // Time-->0/Freq-->1
 # [IsPeriodic] // takes 0 or 1
 # [N1] // number of samples to follow or number of frequencies to follow 
-# [Index SampleAmp] or [Freq Amp PhaseShift]// N1 rows follow with Sample Index followed by space followed by Sample Amplitude in case Time domain was specified in the first row in the file,
+# [Index SampleAmp] or [Freq Amp PhaseShift]// N1 rows follow with Sample Index followed by space followed by
+#  Sample Amplitude in case Time domain was specified in the first row in the file,
 #  or N1 rows follow with frequency followed by space followed by amplitude followed by Phase shift
 
 
