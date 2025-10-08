@@ -15,4 +15,12 @@ def discreteRepresentation(signal:SignalData):
         pplt.show()
 
 def continousRepresentation(signal:SignalData):
-    pass
+    indices=list(signal.data.keys())
+    data =list(signal.data.values())
+    if signal.SignalType==0:
+        pplt.figure(figsize=(100,100))
+        pplt.plot(indices,data)
+        pplt.xlabel('indices')
+        pplt.ylabel('amplitudes')
+        pplt.title('discrete representation of a time domain signal')
+        pplt.show()
