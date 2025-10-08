@@ -1,34 +1,42 @@
 from tkinter import *
 from enum import Enum
 from buttonFunctions import *
+from signalReader import *
+
+signalList:list[SignalData]=[]
 
 class operation(Enum):
     addition=0
     subtraction=1
     multiplication=2
 
-def addSignals(signal1:SignalData,signal2:SignalData):
+def addSignals():
+    global signalList
+    resultantSignal:SignalData=SignalData()
+    for i in max(signalList,key=lambda signal:signal.N1):
+        sum:float=0
+        for signal in signalList:
+            sum+=signal.data[i]
+        resultantSignal.data[i]=sum
+
+def subtractSignals():
     pass
 
-def subtractSignals(signal1:SignalData,signal2:SignalData):
+def multiplySignals():
     pass
 
-def multiplySignals(signal1:SignalData,signal2:SignalData):
-    pass
-
-def calculate(mode:operation,id1:int,id2:int):
-    signal1:SignalData=targetSignals[id1]
-    signal2:SignalData=targetSignals[id2]
+def calculate(mode:operation):
     match mode:
         case operation.addition:
-            addSignals(signal1,signal2)
+            addSignals()
         case operation.subtraction:
-            subtractSignals(signal1,signal2)
+            subtractSignals()
         case operation.multiplication:
-            multiplySignals(signal1,signal2)
+            multiplySignals()
 
 def createOperationWindow(mode:operation):
+    global signalList
     operationWindow:Toplevel=Toplevel()
-    field1:Entry = Entry(operationWindow).pack()
-    field2:Entry =Entry(operationWindow).pack()
-    calculateButton:Button=Button(operationWindow,text="Calculate",command=lambda:calculate(mode,int(field1.get()),int(field2.get()))).pack()
+    chosenSignal:Entry = Entry(operationWindow).pack()
+    pushButton:Button=Button(operationWindow,text="push signal",command=lambda:signalList.append(targetSignals[int(chosenSignal.get())]))
+    calculateButton:Button=Button(operationWindow,text="Calculate",command=lambda:calculate(mode)).pack()

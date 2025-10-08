@@ -11,6 +11,7 @@ mainWindow.config(background="#2a3f5e",menu=menuBar)
 
 #Menus=========================================================================
 arithmeticMenu:Menu=Menu(menuBar,tearoff=0)
+
 menuBar.add_cascade(label="Arithmetic",menu=arithmeticMenu)
 arithmeticMenu.add_command(label="Addition",command=lambda:createOperationWindow(operation.addition))
 arithmeticMenu.add_command(label="Subtraction",command=lambda:createOperationWindow(operation.subtraction))
