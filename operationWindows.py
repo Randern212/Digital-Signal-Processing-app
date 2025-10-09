@@ -2,7 +2,7 @@ from tkinter import *
 from enum import Enum
 from buttonFunctions import *
 from signalReader import *
-
+import math
 signalList:list[SignalData]=[]
 
 class operation(Enum):
@@ -121,11 +121,25 @@ def normalizePeak(signal:SignalData):
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
 
-def generateSinSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:float):
-    pass
 
-def generateCosineSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:float):
-    pass
+def generateSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:float,trigFunc:callable):
+    global signalCounter
+    resultantSignal = SignalData()
+    resultantSignal.SignalType = 0  
+    resultantSignal.IsPeriodic = 1
+    
+    period = 1.0 / analogF
+    samplingInterval = 1.0 / samplingF
+    numberOfSamples = int(period / samplingInterval)
+    resultantSignal.N1 = numberOfSamples
+    
+    for n in range(numberOfSamples):
+        t = n * samplingInterval
+        sample_value = amplitude * trigFunc(2 * math.pi * analogF * t + phaseShift)
+        resultantSignal.data[n] = sample_value
+
+    writeSignal(resultantSignal,signalCounter)
+    signalCounter+=1
 
 def createOperationWindow(mode:operation):
     global signalList
@@ -180,15 +194,14 @@ def createGenerationWindow(mode:signalType):
     phaseShiftEntry:Entry=Entry(generationWinow)
     analogFrequencyEntry:Entry=Entry(generationWinow)
     samplingFrequencyEntry:Entry=Entry(generationWinow)
-
-    generationButton:Button=None
+    trigFunction:callable=math.sin
     match mode:
         case signalType.sin:
-            generationButton=Button(generationWinow,text="Generate Signal",
-                                    command=lambda:generateSinSignal(float(amplitudeEntry.get()),float(phaseShiftEntry.get()),float(analogFrequencyEntry.get()),float(samplingFrequencyEntry.get())))
+            trigFunction=math.sin
         case signalType.cosine:
-            generationButton=Button(generationWinow,text="Generate Signal",
-                                    command=lambda:generateCosineSignal(float(amplitudeEntry.get()),float(phaseShiftEntry.get()),float(analogFrequencyEntry.get()),float(samplingFrequencyEntry.get())))
+            trigFunction=math.cos
+    generationButton:Button=Button(generationWinow,text="Generate Signal",
+                                    command=lambda:generateSignal(float(amplitudeEntry.get()),float(phaseShiftEntry.get()),float(analogFrequencyEntry.get()),float(samplingFrequencyEntry.get()),trigFunction))
     
     amplitudeEntry.pack()
     phaseShiftEntry.pack()
