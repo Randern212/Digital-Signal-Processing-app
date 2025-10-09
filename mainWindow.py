@@ -22,8 +22,8 @@ arithmeticMenu.add_command(label="Accumulation",command=createAccumulationWindow
 
 generationMenu:Menu=Menu(menuBar,tearoff=0)
 menuBar.add_cascade(label="Generate",menu=generationMenu)
-generationMenu.add_command(label="Sinusoidal")
-generationMenu.add_command(label="Cosinusoidal")
+generationMenu.add_command(label="Sinusoidal",command=lambda:createGenerationWindow(signalType.sin))
+generationMenu.add_command(label="Cosinusoidal",command=lambda:createGenerationWindow(signalType.cosine))
 #==============================================================================
 
 targetedSignalEntry:Entry=Entry(mainWindow)
