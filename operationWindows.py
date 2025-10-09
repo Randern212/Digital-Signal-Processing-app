@@ -9,6 +9,10 @@ class operation(Enum):
     addition=0
     subtraction=1
 
+class signalType(Enum):
+    sin=0
+    cosine=1
+
 def addSignals():
     global signalList
     global signalCounter
@@ -117,6 +121,12 @@ def normalizePeak(signal:SignalData):
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
 
+def generateSinSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:float):
+    pass
+
+def generateCosineSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:float):
+    pass
+
 def createOperationWindow(mode:operation):
     global signalList
     operationWindow:Toplevel=Toplevel()
@@ -163,3 +173,25 @@ def createNormalizationWindow():
     signalEntry.pack()
     minMaxButton.pack()
     peakButton.pack()
+
+def createGenerationWindow(mode:signalType):
+    generationWinow:Toplevel=Toplevel()
+    amplitudeEntry:Entry=Entry(generationWinow)
+    phaseShiftEntry:Entry=Entry(generationWinow)
+    analogFrequencyEntry:Entry=Entry(generationWinow)
+    samplingFrequencyEntry:Entry=Entry(generationWinow)
+
+    generationButton:Button=None
+    match mode:
+        case signalType.sin:
+            generationButton=Button(generationWinow,text="Generate Signal",
+                                    command=lambda:generateSinSignal(float(amplitudeEntry.get()),float(phaseShiftEntry.get()),float(analogFrequencyEntry.get()),float(samplingFrequencyEntry.get())))
+        case signalType.cosine:
+            generationButton=Button(generationWinow,text="Generate Signal",
+                                    command=lambda:generateCosineSignal(float(amplitudeEntry.get()),float(phaseShiftEntry.get()),float(analogFrequencyEntry.get()),float(samplingFrequencyEntry.get())))
+    
+    amplitudeEntry.pack()
+    phaseShiftEntry.pack()
+    analogFrequencyEntry.pack()
+    samplingFrequencyEntry.pack()
+    generationButton.pack()
