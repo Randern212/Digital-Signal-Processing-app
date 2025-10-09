@@ -95,7 +95,7 @@ def normalizeMinMax(signal:SignalData):
     resultantSignal.N1=signal.N1
 
     maxValue:float=max(signal.data.values())
-    minValue:float=max(signal.data.values())
+    minValue:float=min(signal.data.values())
     
     for index in signal.data.keys():
         resultantSignal.data[index]=(signal.data[index]-minValue)/(maxValue-minValue)
@@ -158,7 +158,7 @@ def createNormalizationWindow():
     normalizationWindow:Toplevel=Toplevel()
     signalEntry:Entry=Entry(normalizationWindow)
     minMaxButton:Button=Button(normalizationWindow,text="normalize [0,1]",command=lambda:normalizeMinMax(targetSignals[int(signalEntry.get())]))
-    peakButton:Button=Button(normalizationWindow,text="normalize [-1,1]",command=normalizePeak(targetSignals[int(signalEntry.get())]))
+    peakButton:Button=Button(normalizationWindow,text="normalize [-1,1]",command=lambda:normalizePeak(targetSignals[int(signalEntry.get())]))
 
     signalEntry.pack()
     minMaxButton.pack()
