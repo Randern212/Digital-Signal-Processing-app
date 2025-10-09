@@ -87,6 +87,36 @@ def calculate(mode:operation):
         case operation.subtraction:
             subtractSignals()
 
+def normalizeMinMax(signal:SignalData):
+    global signalCounter
+    resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType=signal.SignalType
+    resultantSignal.IsPeriodic=signal.IsPeriodic
+    resultantSignal.N1=signal.N1
+
+    maxValue:float=max(signal.data.values())
+    minValue:float=max(signal.data.values())
+    
+    for index in signal.data.keys():
+        resultantSignal.data[index]=(signal.data[index]-minValue)/(maxValue-minValue)
+    
+    writeSignal(resultantSignal,signalCounter)
+    signalCounter+=1
+
+def normalizePeak(signal:SignalData):
+    global signalCounter
+    resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType=signal.SignalType
+    resultantSignal.IsPeriodic=signal.IsPeriodic
+    resultantSignal.N1=signal.N1
+    maxValue:float=abs(max(signal.data.values()))
+
+    for index in signal.data.keys():
+        resultantSignal.data[index]=signal.data[index]/maxValue
+    
+    writeSignal(resultantSignal,signalCounter)
+    signalCounter+=1
+
 def createOperationWindow(mode:operation):
     global signalList
     operationWindow:Toplevel=Toplevel()
@@ -123,3 +153,13 @@ def createAccumulationWindow():
 
     signalEntry.pack()
     accumulationButton.pack()
+
+def createNormalizationWindow():
+    normalizationWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(normalizationWindow)
+    minMaxButton:Button=Button(normalizationWindow,text="normalize [0,1]",command=lambda:normalizeMinMax(targetSignals[int(signalEntry.get())]))
+    peakButton:Button=Button(normalizationWindow,text="normalize [-1,1]",command=normalizePeak(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    minMaxButton.pack()
+    peakButton.pack()
