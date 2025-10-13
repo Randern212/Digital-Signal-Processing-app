@@ -141,6 +141,9 @@ def generateSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:floa
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
 
+def quantizeSignal(signa:SignalData,numberOfBits:int):
+    pass
+
 def createOperationWindow(mode:operation):
     global signalList
     operationWindow:Toplevel=Toplevel()
@@ -208,3 +211,13 @@ def createGenerationWindow(mode:signalType):
     analogFrequencyEntry.pack()
     samplingFrequencyEntry.pack()
     generationButton.pack()
+
+    def createQuantizationWindow():
+        quantizationWindow:Toplevel=Toplevel()
+        signalEntry:Entry=Entry(quantizationWindow)
+        numberOfBitsEntry:Entry=Entry(quantizationWindow)
+        quantizeButton:Button=Button(quantizationWindow,text="Quantize", command=lambda:quantizeSignal(targetSignals[int(signalEntry.get())],int(numberOfBitsEntry.get())))
+        
+        signalEntry.pack()
+        numberOfBitsEntry.pack()
+        quantizeButton.pack()
