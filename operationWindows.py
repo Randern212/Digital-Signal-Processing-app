@@ -98,9 +98,10 @@ def normalizeMinMax(signal:SignalData):
     resultantSignal.IsPeriodic=signal.IsPeriodic
     resultantSignal.N1=signal.N1
 
-    maxValue:float=max(signal.data.values())
-    minValue:float=min(signal.data.values())
-    
+    amplitudes = [signal.data[i] for i in range(signal.N1)]
+    maxValue:float=max(amplitudes)
+    minValue:float=min(amplitudes)
+
     for index in signal.data.keys():
         resultantSignal.data[index]=(signal.data[index]-minValue)/(maxValue-minValue)
     
@@ -148,18 +149,24 @@ def quantizeSignal(signal:SignalData,numberOfBits:int):
     resultantSignal.IsPeriodic=signal.IsPeriodic
     resultantSignal.N1=signal.N1
 
-    numberOfLevels:int= math.log2(numberOfBits)
-    maxValue:float=max(signal.data.values())
-    minValue:float=min(signal.data.values())
+    numberOfLevels:int= 2**(numberOfBits)
+    amplitudes = [signal.data[i] for i in range(signal.N1)]
+
+    maxValue:float=max(amplitudes)
+    minValue:float=min(amplitudes)
 
     Delta=(maxValue-minValue)/numberOfLevels
 
     for index in range(signal.N1):
         originalAmplitude=signal.data[index]
+        
         currentLevel=int((originalAmplitude-minValue)/Delta)
+        if currentLevel == numberOfLevels:
+            currentLevel = numberOfLevels - 1
+        
         quantizedAmplitude=minValue+(currentLevel*Delta)+(Delta/2)
-        binaryLevel= format(currentLevel,f'0{numberOfBits}b')
         resultantSignal.data[index]= quantizedAmplitude
+
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
 
@@ -231,12 +238,12 @@ def createGenerationWindow(mode:signalType):
     samplingFrequencyEntry.pack()
     generationButton.pack()
 
-    def createQuantizationWindow():
-        quantizationWindow:Toplevel=Toplevel()
-        signalEntry:Entry=Entry(quantizationWindow)
-        numberOfBitsEntry:Entry=Entry(quantizationWindow)
-        quantizeButton:Button=Button(quantizationWindow,text="Quantize", command=lambda:quantizeSignal(targetSignals[int(signalEntry.get())],int(numberOfBitsEntry.get())))
-        
-        signalEntry.pack()
-        numberOfBitsEntry.pack()
-        quantizeButton.pack()
+def createQuantizationWindow():
+    quantizationWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(quantizationWindow)
+    numberOfBitsEntry:Entry=Entry(quantizationWindow)
+    quantizeButton:Button=Button(quantizationWindow,text="Quantize", command=lambda:quantizeSignal(targetSignals[int(signalEntry.get())],int(numberOfBitsEntry.get())))
+    
+    signalEntry.pack()
+    numberOfBitsEntry.pack()
+    quantizeButton.pack()

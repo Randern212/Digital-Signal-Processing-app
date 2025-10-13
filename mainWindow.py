@@ -43,9 +43,15 @@ ContinousSignalButton:Button=Button(mainWindow,
                                     command=lambda:continousRepresentation(targetSignals[int(targetedSignalEntry.get())]),
                                     text="Continous Display",
                                     font=("times new roman", 8))
+
+quantizeSignalButton:Button=Button(mainWindow,
+                                   command=createQuantizationWindow,
+                                   text="Quantize a signal",
+                                   font=("times new roman", 8))
 #=============================================================================
 
 pickSignal.pack()
 targetedSignalEntry.pack()
 discreteSignalButton.pack()
 ContinousSignalButton.pack()
+quantizeSignalButton.pack()
