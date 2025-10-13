@@ -141,8 +141,27 @@ def generateSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:floa
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
 
-def quantizeSignal(signa:SignalData,numberOfBits:int):
-    pass
+def quantizeSignal(signal:SignalData,numberOfBits:int):
+    global signalCounter
+    resultantSignal = SignalData()
+    resultantSignal.SignalType=signal.SignalType
+    resultantSignal.IsPeriodic=signal.IsPeriodic
+    resultantSignal.N1=signal.N1
+
+    numberOfLevels:int= math.log2(numberOfBits)
+    maxValue:float=max(signal.data.values())
+    minValue:float=min(signal.data.values())
+
+    Delta=(maxValue-minValue)/numberOfLevels
+
+    for index in range(signal.N1):
+        originalAmplitude=signal.data[index]
+        currentLevel=int((originalAmplitude-minValue)/Delta)
+        quantizedAmplitude=minValue+(currentLevel*Delta)+(Delta/2)
+        binaryLevel= format(currentLevel,f'0{numberOfBits}b')
+        resultantSignal.data[index]= quantizedAmplitude
+    writeSignal(resultantSignal,signalCounter)
+    signalCounter+=1
 
 def createOperationWindow(mode:operation):
     global signalList
