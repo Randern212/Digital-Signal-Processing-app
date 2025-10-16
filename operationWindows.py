@@ -129,15 +129,13 @@ def generateSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:floa
     resultantSignal.SignalType = 0  
     resultantSignal.IsPeriodic = 1
     
-    period = 1.0 / analogF
     samplingInterval = 1.0 / samplingF
-    numberOfSamples = int(period / samplingInterval)
-    resultantSignal.N1 = numberOfSamples
+    resultantSignal.N1 = samplingF
     
-    for n in range(numberOfSamples):
+    for n in range(int(samplingF)):
         t = n * samplingInterval
-        sample_value = amplitude * trigFunc(2 * math.pi * analogF * t + phaseShift)
-        resultantSignal.data[n] = sample_value
+        sampleValue = amplitude * trigFunc(2 * math.pi * analogF * t + phaseShift)
+        resultantSignal.data[n] = sampleValue
 
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
