@@ -167,7 +167,7 @@ def quantizeSignal(signal:SignalData,numberOfBits:int):
         quantizedAmplitude=minValue+(currentLevel*Delta)+(Delta/2)
         resultantSignal.data[index]= quantizedAmplitude
 
-    writeSignal(resultantSignal,signalCounter)
+    writeSignal(resultantSignal,signalCounter,True,numberOfBits)
     signalCounter+=1
 
 def createOperationWindow(mode:operation):

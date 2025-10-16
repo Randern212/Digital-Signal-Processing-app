@@ -23,7 +23,7 @@ def readSignal(filePath:str)->SignalData:
                     returnSignal.data[frequency] = (amplitude, phaseShift)
     return returnSignal
 
-def writeSignal(signal: SignalData,index:int):
+def writeSignal(signal: SignalData,index:int,isBoolean:bool=False,numberOfBits:int=0):
     filePath:str="Signal"+str(index)+".txt"
     with open(filePath, 'w') as signalFile:
         signalFile.write(f"{int(signal.SignalType)}\n")
@@ -33,6 +33,8 @@ def writeSignal(signal: SignalData,index:int):
         if signal.SignalType == 0:
             sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
             for index, amplitude in sorted_items:
+                if isBoolean:
+                    index=format(index,'#0'+str(numberOfBits+2)+'b')[2:]
                 signalFile.write(f"{index} {amplitude}\n")
         else:  
             sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
