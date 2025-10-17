@@ -3,7 +3,7 @@ from enum import Enum
 from buttonFunctions import *
 from signalReader import *
 import math
-
+import QuantizedSignal
 class operation(Enum):
     addition=0
     subtraction=1
@@ -141,7 +141,7 @@ def generateSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:floa
 
 def quantizeSignal(signal:SignalData,numberOfBits:int):
     global signalCounter
-    resultantSignal = SignalData()
+    resultantSignal = QuantizedSignal()
     resultantSignal.SignalType=signal.SignalType
     resultantSignal.IsPeriodic=signal.IsPeriodic
     resultantSignal.N1=signal.N1
@@ -154,15 +154,37 @@ def quantizeSignal(signal:SignalData,numberOfBits:int):
 
     Delta=(maxValue-minValue)/numberOfLevels
 
+    ranges, midpoints = createRanges(signal.N1, minValue, maxValue, Delta)
+    
     for index in range(signal.N1):
         originalAmplitude=signal.data[index]
-        
-        currentLevel=int((originalAmplitude-minValue)/Delta)
-        if currentLevel == numberOfLevels:
-            currentLevel = numberOfLevels - 1
-        
-        quantizedAmplitude=minValue+(currentLevel*Delta)+(Delta/2)
-        resultantSignal.data[index]= quantizedAmplitude
+        quantizedAmplitude, currentLevel=estimateIndex(originalAmplitude, ranges, midpoints)
+
+        resultantSignal.data= (currentLevel, quantizedAmplitude)
 
     writeSignal(resultantSignal,signalCounter,True,numberOfBits)
     signalCounter+=1
+
+def estimateIndex(amplitude:int, rangeList:list[tuple[float,float]], midpointsList:list[float]):
+    currentLevel = 0
+    quantizedAmplitude = amplitude
+
+    for i in range(len(midpointsList)):
+        if quantizedAmplitude<=rangeList.index(i)[0] and quantizedAmplitude>=rangeList.index(i)[1]:
+            quantizedAmplitude=midpointsList.index(i)
+            currentLevel=i
+            return quantizedAmplitude,currentLevel
+
+    return currentLevel, quantizedAmplitude
+
+def createRanges(N1:int,min:float,max:float,delta:float):
+    rangeList:list[tuple[float,float]]=[]
+    midpointsList:list[float]=[]
+
+    for i in range(N1):
+        pair=(min, max+delta)
+        rangeList.append(pair)
+        midpoint=(min+max+delta)/2
+        midpointsList.append(midpoint)
+    
+    return rangeList, midpointsList
