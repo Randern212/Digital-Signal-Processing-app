@@ -3,7 +3,7 @@ from enum import Enum
 from buttonFunctions import *
 from signalReader import *
 import math
-import QuantizedSignal
+from QuantizedSignal import *
 class operation(Enum):
     addition=0
     subtraction=1
@@ -152,39 +152,42 @@ def quantizeSignal(signal:SignalData,numberOfBits:int):
     maxValue:float=max(amplitudes)
     minValue:float=min(amplitudes)
 
-    Delta=(maxValue-minValue)/numberOfLevels
+    Delta:float=(maxValue-minValue)/numberOfLevels
 
-    ranges, midpoints = createRanges(signal.N1, minValue, maxValue, Delta)
+    ranges, midpoints = createRanges(numberOfLevels, minValue, maxValue, Delta)
     
     for index in range(signal.N1):
         originalAmplitude=signal.data[index]
-        quantizedAmplitude, currentLevel=estimateIndex(originalAmplitude, ranges, midpoints)
+        quantizedAmplitude, currentLevel=estimateIndex(originalAmplitude, ranges, midpoints)    
+        resultantSignal.data.append((currentLevel, quantizedAmplitude))
 
-        resultantSignal.data= (currentLevel, quantizedAmplitude)
-
-    writeSignal(resultantSignal,signalCounter,True,numberOfBits)
+    writeSignal(resultantSignal,signalCounter,numberOfBits)
     signalCounter+=1
 
 def estimateIndex(amplitude:int, rangeList:list[tuple[float,float]], midpointsList:list[float]):
-    currentLevel = 0
     quantizedAmplitude = amplitude
-
+    currentLevel=0
     for i in range(len(midpointsList)):
-        if quantizedAmplitude<=rangeList.index(i)[0] and quantizedAmplitude>=rangeList.index(i)[1]:
-            quantizedAmplitude=midpointsList.index(i)
+        if quantizedAmplitude>=rangeList[i][0] and quantizedAmplitude<=rangeList[i][1]:
+            print("GOTT HERE ++++++++++++++++++++++++++++++++++++++++++++++++++")
+            quantizedAmplitude=midpointsList[i]
             currentLevel=i
             return quantizedAmplitude,currentLevel
+        
+    return quantizedAmplitude,currentLevel
 
-    return currentLevel, quantizedAmplitude
-
-def createRanges(N1:int,min:float,max:float,delta:float):
+def createRanges(numberOfLevels:int,min:float,max:float,delta:float):
     rangeList:list[tuple[float,float]]=[]
     midpointsList:list[float]=[]
-
-    for i in range(N1):
-        pair=(min, max+delta)
+    currentMin=min
+    for i in range(numberOfLevels):
+        currentMax=currentMin+delta
+        if i==numberOfLevels-1:
+            currentMax=max
+        pair=(currentMin, currentMax)
         rangeList.append(pair)
-        midpoint=(min+max+delta)/2
+        midpoint=(currentMin+currentMax)/2
         midpointsList.append(midpoint)
-    
+        currentMin=currentMax
+
     return rangeList, midpointsList

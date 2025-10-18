@@ -33,8 +33,8 @@ def writeSignal(signal: SignalData,index:int):
         
         if signal.SignalType == 0:
             sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
-            for index, amplitude in sorted_items:
-                signalFile.write(f"{index} {amplitude}\n")
+            for i, amplitude in sorted_items:
+                signalFile.write(f"{i} {amplitude}\n")
         else:  
             sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
             for frequency, (amplitude, phase_shift) in sorted_items:
@@ -48,6 +48,6 @@ def writeSignal(signal:QuantizedSignal ,index:int,numberOfBits:int=0):
         signalFile.write(f"{signal.N1}\n")
         
         if signal.SignalType == 0:
-            for dataPair in signal.data:
-                index=format(index,'#0'+str(numberOfBits+2)+'b')[2:]
-                signalFile.write(f"{index} {dataPair[1]}\n")
+            for i,amplitude in signal.data:
+                level=format(i,'#0'+str(numberOfBits+2)+'b')[2:]
+                signalFile.write(f"{level} {amplitude}\n")
