@@ -143,7 +143,7 @@ def generateSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:floa
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
 
-def quantizeSignalByBits(signal:SignalData,numberOfBits:int):
+def quantizeSignalByBits(signal:SignalData,numberOfBits:int,write:bool=True):
     global signalCounter
     resultantSignal = QuantizedSignal()
     resultantSignal.SignalType=signal.SignalType
@@ -164,9 +164,11 @@ def quantizeSignalByBits(signal:SignalData,numberOfBits:int):
         originalAmplitude=signal.data[index]
         quantizedAmplitude, currentLevel=estimateIndex(originalAmplitude, ranges, midpoints)    
         resultantSignal.data.append((currentLevel, quantizedAmplitude))
-
-    writeSignal(resultantSignal,signalCounter,numberOfBits)
-    signalCounter+=1
+    if write:
+        writeSignal(resultantSignal,signalCounter,WriteMethod.quantizedBits,numberOfBits)
+        signalCounter+=1
+    
+    return resultantSignal
 
 def estimateIndex(amplitude:int, rangeList:list[tuple[float,float]], midpointsList:list[float]):
     quantizedAmplitude = amplitude
@@ -196,4 +198,6 @@ def createRanges(numberOfLevels:int,min:float,max:float,delta:float):
     return rangeList, midpointsList
 
 def quantizeSignalByLevels(signal:SignalData, numberOfLevels:int):
-    pass
+    numberOfBits:int=math.log2(numberOfLevels)
+    resultantSignal=quantizeSignalByBits(signal,numberOfBits,write=False)
+    writeSignal(resultantSignal,signalCounter,WriteMethod.quantizedLevels,numberOfBits)

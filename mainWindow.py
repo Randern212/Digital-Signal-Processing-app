@@ -45,12 +45,12 @@ ContinousSignalButton:Button=Button(mainWindow,
                                     font=("times new roman", 8))
 
 quantizeSignalButtonByBits:Button=Button(mainWindow,
-                                   command=createQuantizationWindow,
+                                   command=lambda:createQuantizationWindow(quantizationType.bits),
                                    text="Quantize a signal by bits",
                                    font=("times new roman", 8))
 
 quantizeSignalButtonByLevels:Button=Button(mainWindow,
-                                   command=createQuantizationWindow,
+                                   command=lambda:createQuantizationWindow(quantizationType.levels),
                                    text="Quantize a signal by levels",
                                    font=("times new roman", 8))
 #=============================================================================

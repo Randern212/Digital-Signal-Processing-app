@@ -1,5 +1,10 @@
 from signalClass import *
 from QuantizedSignal import *
+from enum import Enum
+class WriteMethod(Enum):
+    normal=0
+    quantizedBits=1
+    quantizedLevels=2
 
 def readSignal(filePath:str)->SignalData:
     returnSignal:SignalData = SignalData()
@@ -24,30 +29,35 @@ def readSignal(filePath:str)->SignalData:
                     returnSignal.data[frequency] = (amplitude, phaseShift)
     return returnSignal
 
-def writeSignal(signal: SignalData,index:int):
+def writeSignal(signal, index:int, mode:WriteMethod = WriteMethod.normal, numberOfBits:int = 0):
     filePath:str="Signal"+str(index)+".txt"
     with open(filePath, 'w') as signalFile:
         signalFile.write(f"{int(signal.SignalType)}\n")
         signalFile.write(f"{int(signal.IsPeriodic)}\n")
         signalFile.write(f"{signal.N1}\n")
-        
-        if signal.SignalType == 0:
-            sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
-            for i, amplitude in sorted_items:
-                signalFile.write(f"{i} {amplitude}\n")
-        else:  
-            sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
-            for frequency, (amplitude, phase_shift) in sorted_items:
-                signalFile.write(f"{frequency} {amplitude} {phase_shift}\n")
+        match mode:
+            case WriteMethod.normal:
+                writeModeNoraml(signal,signalFile)
+            case WriteMethod.quantizedBits:
+                writeModeQuantizedBits(signal,signalFile,numberOfBits)
+            case WriteMethod.quantizedLevels:
+                writeModeQuantizedLevels(signal,signalFile,numberOfBits)
 
-def writeSignal(signal:QuantizedSignal ,index:int,numberOfBits:int=0):
-    filePath:str="Signal"+str(index)+".txt"
-    with open(filePath, 'w') as signalFile:
-        signalFile.write(f"{int(signal.SignalType)}\n")
-        signalFile.write(f"{int(signal.IsPeriodic)}\n")
-        signalFile.write(f"{signal.N1}\n")
-        
-        if signal.SignalType == 0:
-            for i,amplitude in signal.data:
-                level=format(i,'#0'+str(numberOfBits+2)+'b')[2:]
-                signalFile.write(f"{level} {amplitude}\n")
+def writeModeNoraml(signal,signalFile):
+    if signal.SignalType == 0:
+        sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
+        for i, amplitude in sorted_items:
+            signalFile.write(f"{i} {amplitude}\n")
+    else:  
+        sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
+        for frequency, (amplitude, phase_shift) in sorted_items:
+            signalFile.write(f"{frequency} {amplitude} {phase_shift}\n")
+
+def writeModeQuantizedBits(signal, signalFile, numberOfBits:int):
+    if signal.SignalType == 0:
+        for i,amplitude in signal.data:
+            encodedLevel=format(i,'#0'+str(numberOfBits+2)+'b')[2:]
+            signalFile.write(f"{encodedLevel} {amplitude}\n")
+
+def writeModeQuantizedLevels(signal, signalFile, numberOfBits:int):
+    pass
