@@ -55,9 +55,12 @@ def writeModeNoraml(signal,signalFile):
 
 def writeModeQuantizedBits(signal, signalFile, numberOfBits:int):
     if signal.SignalType == 0:
-        for i,amplitude in signal.data:
-            encodedLevel=format(i,'#0'+str(numberOfBits+2)+'b')[2:]
+        for level,amplitude in signal.data:
+            encodedLevel=format(level,'#0'+str(numberOfBits+2)+'b')[2:]
             signalFile.write(f"{encodedLevel} {amplitude}\n")
 
 def writeModeQuantizedLevels(signal, signalFile, numberOfBits:int):
-    pass
+    if signal.SignalType == 0:
+        for level,amplitude in signal.data:
+            encodedLevel=format(level,'#0'+str(numberOfBits+2)+'b')[2:]
+            signalFile.write(f"{level} {encodedLevel} {amplitude}\n")
