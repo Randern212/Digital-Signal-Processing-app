@@ -61,6 +61,8 @@ def writeModeQuantizedBits(signal, signalFile, numberOfBits:int):
 
 def writeModeQuantizedLevels(signal, signalFile, numberOfBits:int):
     if signal.SignalType == 0:
+        i:int=0
         for level,amplitude in signal.data:
             encodedLevel=format(level,'#0'+str(numberOfBits+2)+'b')[2:]
-            signalFile.write(f"{level} {encodedLevel} {amplitude}\n")
+            signalFile.write(f"{level+1} {encodedLevel} {amplitude} {signal.error[i]}\n")
+            i+=1

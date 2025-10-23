@@ -4,6 +4,7 @@ class QuantizedSignal:
         self.IsPeriodic: bool = False  
         self.N1: int = 0
         self.data:list[tuple[int,float]]=[]
+        self.error:list[float]=[]
 
 # The file will contain the samples in time domain or frequency domain,
 # Follows is a description for how to build such a file:
@@ -11,7 +12,7 @@ class QuantizedSignal:
 # [SignalType] // Time-->0/Freq-->1
 # [IsPeriodic] // takes 0 or 1
 # [N1] // number of samples to follow or number of frequencies to follow 
-# [bitSizedLevel SampleAmp] N1 rows 
+# [bitSizedLevel SampleAmp] N1 rows OR [level EncodedLeve SampleAmp Error]
 
 # example file.. 
 # 0
@@ -28,3 +29,17 @@ class QuantizedSignal:
 # 110 0.85
 # 111 0.95
 # 000 0
+
+# OR..
+# 0
+# 0
+# 9
+# 1 00 -1.485 -0.265
+# 3 10 1.615 0.115
+# 4 11 3.165 -0.075
+# 4 11 3.165 -0.775
+# 3 10 1.615 -0.585
+# 1 00 -1.485 -0.385
+# 1 00 -1.485 0.775
+# 1 00 -1.485 0.395
+# 1 00 -1.485

@@ -162,8 +162,11 @@ def quantizeSignalByBits(signal:SignalData,numberOfBits:int,write:bool=True):
     
     for index in range(signal.N1):
         originalAmplitude=signal.data[index]
-        quantizedAmplitude, currentLevel=estimateIndex(originalAmplitude, ranges, midpoints)    
+        quantizedAmplitude, currentLevel=estimateIndex(originalAmplitude, ranges, midpoints)
+        quantizationError:float=quantizedAmplitude - originalAmplitude    
         resultantSignal.data.append((currentLevel, quantizedAmplitude))
+        resultantSignal.error.append(quantizationError)
+
     if write:
         writeSignal(resultantSignal,signalCounter,WriteMethod.quantizedBits,numberOfBits)
         signalCounter+=1
@@ -198,6 +201,8 @@ def createRanges(numberOfLevels:int,min:float,max:float,delta:float):
     return rangeList, midpointsList
 
 def quantizeSignalByLevels(signal:SignalData, numberOfLevels:int):
-    numberOfBits:int=math.log2(numberOfLevels)
+    global signalCounter
+    numberOfBits:int=int(math.log2(numberOfLevels))
     resultantSignal=quantizeSignalByBits(signal,numberOfBits,write=False)
     writeSignal(resultantSignal,signalCounter,WriteMethod.quantizedLevels,numberOfBits)
+    signalCounter+=1
