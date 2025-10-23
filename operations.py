@@ -12,6 +12,10 @@ class signalType(Enum):
     sin=0
     cosine=1
 
+class quantizationType(Enum):
+    bits=0
+    levels=1
+
 def addSignals():
     global signalList
     global signalCounter
@@ -139,7 +143,7 @@ def generateSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:floa
     writeSignal(resultantSignal,signalCounter)
     signalCounter+=1
 
-def quantizeSignal(signal:SignalData,numberOfBits:int):
+def quantizeSignalByBits(signal:SignalData,numberOfBits:int):
     global signalCounter
     resultantSignal = QuantizedSignal()
     resultantSignal.SignalType=signal.SignalType
@@ -169,7 +173,6 @@ def estimateIndex(amplitude:int, rangeList:list[tuple[float,float]], midpointsLi
     currentLevel=0
     for i in range(len(midpointsList)):
         if quantizedAmplitude>=rangeList[i][0] and quantizedAmplitude<=rangeList[i][1]:
-            print("GOTT HERE ++++++++++++++++++++++++++++++++++++++++++++++++++")
             quantizedAmplitude=midpointsList[i]
             currentLevel=i
             return quantizedAmplitude,currentLevel
@@ -191,3 +194,6 @@ def createRanges(numberOfLevels:int,min:float,max:float,delta:float):
         currentMin=currentMax
 
     return rangeList, midpointsList
+
+def quantizeSignalByLevels(signal:SignalData, numberOfLevels:int):
+    pass

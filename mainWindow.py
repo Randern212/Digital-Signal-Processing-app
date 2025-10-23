@@ -44,9 +44,14 @@ ContinousSignalButton:Button=Button(mainWindow,
                                     text="Continous Display",
                                     font=("times new roman", 8))
 
-quantizeSignalButton:Button=Button(mainWindow,
+quantizeSignalButtonByBits:Button=Button(mainWindow,
                                    command=createQuantizationWindow,
-                                   text="Quantize a signal",
+                                   text="Quantize a signal by bits",
+                                   font=("times new roman", 8))
+
+quantizeSignalButtonByLevels:Button=Button(mainWindow,
+                                   command=createQuantizationWindow,
+                                   text="Quantize a signal by levels",
                                    font=("times new roman", 8))
 #=============================================================================
 
@@ -54,4 +59,5 @@ pickSignal.pack()
 targetedSignalEntry.pack()
 discreteSignalButton.pack()
 ContinousSignalButton.pack()
-quantizeSignalButton.pack()
+quantizeSignalButtonByBits.pack()
+quantizeSignalButtonByLevels.pack()

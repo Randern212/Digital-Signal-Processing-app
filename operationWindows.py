@@ -72,12 +72,19 @@ def createGenerationWindow(mode:signalType):
     samplingFrequencyEntry.pack()
     generationButton.pack()
 
-def createQuantizationWindow():
+def createQuantizationWindow(mode:quantizationType):
+    chosenMethod:callable=None
+    
+    if mode==quantizationType.bits:
+        chosenMethod=quantizeSignalByBits
+    else:
+        chosenMethod=quantizeSignalByLevels
+    
     quantizationWindow:Toplevel=Toplevel()
     signalEntry:Entry=Entry(quantizationWindow)
-    numberOfBitsEntry:Entry=Entry(quantizationWindow)
-    quantizeButton:Button=Button(quantizationWindow,text="Quantize", command=lambda:quantizeSignal(targetSignals[int(signalEntry.get())],int(numberOfBitsEntry.get())))
+    bitsOrLevelsEntry:Entry=Entry(quantizationWindow)
+    quantizeButton:Button=Button(quantizationWindow,text="Quantize", command=lambda:chosenMethod(targetSignals[int(signalEntry.get())],int(bitsOrLevelsEntry.get())))
     
     signalEntry.pack()
-    numberOfBitsEntry.pack()
+    bitsOrLevelsEntry.pack()
     quantizeButton.pack()
