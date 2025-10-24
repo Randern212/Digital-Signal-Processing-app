@@ -5,6 +5,7 @@ from signalReader import *
 import math
 from QuantizedSignal import *
 from plotFunctions import *
+from cmath import *
 class operation(Enum):
     addition=0
     subtraction=1
@@ -246,19 +247,17 @@ def DFT(signal:SignalData,write:bool=True, plot:bool=True):
     resultantSignal.N1 = signal.N1
     
     frequencies = signal.data.keys()
-    length:int=len(frequencies)
+    length:int = signal.N1
     
     for k in frequencies:
         amplitude:complex=0
         for n in frequencies:
-            amplitude += n * pow(math.e,(-1j*2*math.pi*k*n)/length)
+            amplitude += signal.data[n] * math.e**((-1j*2*math.pi*k*n)/length)
 
-        phase:float = math.atan(amplitude.imag/amplitude.real)
-        realAmplitude:float = math.sqrt(pow(amplitude.real,2)+pow(amplitude.imag,2))
-        resultantSignal.data[k] = (realAmplitude, phase)
+        phaseValue:float = phase(amplitude)
+        realAmplitude:float = math.sqrt(amplitude.real**2+amplitude.imag**2)
+        resultantSignal.data[k] = (realAmplitude, phaseValue)
     
-    resultantSignal = normalizePeak(resultantSignal,False)
-
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
