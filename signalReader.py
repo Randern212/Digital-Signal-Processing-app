@@ -6,7 +6,7 @@ class WriteMethod(Enum):
     quantizedBits=1
     quantizedLevels=2
 
-def readSignal(filePath:str)->SignalData:
+def readSignal(filePath:str,skipFrequency:bool=False)->SignalData:
     returnSignal:SignalData = SignalData()
 
     with open(filePath,'r') as signalFile:
@@ -22,11 +22,16 @@ def readSignal(filePath:str)->SignalData:
                     amplitude = float(values[1])
                     returnSignal.data[index] = amplitude
              else:
-                if len(values) >= 3:
+                if skipFrequency and len(values)>=2:
+                    amplitude = float(values[0].rstrip('f'))
+                    phaseShift = float(values[1].rstrip('f'))
+                    returnSignal.data[i] = (amplitude, phaseShift)
+                if len(values) >= 3:                
                     frequency = float(values[0])
                     amplitude = float(values[1])
                     phaseShift = float(values[2])
                     returnSignal.data[frequency] = (amplitude, phaseShift)
+
     return returnSignal
 
 def writeSignal(signal, index:int, mode:WriteMethod = WriteMethod.normal, numberOfBits:int = 0):

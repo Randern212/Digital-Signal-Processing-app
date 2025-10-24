@@ -121,8 +121,14 @@ def createDCRemovalWindow():
 
 def createIDFTReconstructionWindow():
     reconstructionWindow:Toplevel=Toplevel()
-    signalEntry:Entry=Entry(reconstructionWindow)
-    reconstructionButton:Button=Button(reconstructionWindow,text="Remove DC component",command=lambda:removeDcComponent(targetSignals[int(signalEntry.get())]))
 
+    pickSignal:Button=Button(reconstructionWindow,
+                          command= lambda:submitFile(True),
+                          text="Choose signal file to",
+                            font=("times new roman", 12))
+    signalEntry:Entry=Entry(reconstructionWindow)
+    reconstructionButton:Button=Button(reconstructionWindow,text="Perform IDFT",command=lambda:IDFT(targetSignals[int(signalEntry.get())]))
+    
+    pickSignal.pack()
     signalEntry.pack()
     reconstructionButton.pack()

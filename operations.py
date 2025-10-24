@@ -238,6 +238,49 @@ def quantizeSignalByLevels(signal:SignalData, numberOfLevels:int, write:bool=Tru
     
     return resultantSignal
 
+def displayDomFrequency(signal:SignalData,write:bool=True):
+    global signalCounter
+
+    normalizedSignal:SignalData=normalizePeak(signal)
+    resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType = signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+
+    for i in range(normalizedSignal.N1):
+        if normalizedSignal.SignalType==1:
+            normalizedAmplitude=normalizedSignal.data[i][0]
+        else:
+            normalizedAmplitude=normalizedSignal.data[i]
+        
+        if normalizedAmplitude>0.5:
+            resultantSignal.data[i]=normalizedAmplitude
+
+    resultantSignal.N1=len(resultantSignal.data)
+
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
+    return readSignal
+
+def removeDcComponent(signal:SignalData, write:bool=True):
+    global signalCounter
+    
+    resultantSignal:SignalData = SignalData()
+    resultantSignal.SignalType = signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+    resultantSignal.N1 = signal.N1-1
+
+    for freq, component in signal.data.items():
+        if freq != 0:  # Skip DC
+            resultantSignal.data[freq] = component
+
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
+    return resultantSignal
+
 def DFT(signal:SignalData,write:bool=True, plot:bool=True):
     global signalCounter
     
@@ -267,48 +310,20 @@ def DFT(signal:SignalData,write:bool=True, plot:bool=True):
     
     return resultantSignal
 
-def displayDomFrequency(signal:SignalData,write:bool=True):
-    global signalCounter
-
-    normalizedSignal:SignalData=normalizePeak(signal)
-    resultantSignal:SignalData=SignalData()
-    resultantSignal.SignalType = signal.SignalType
-    resultantSignal.IsPeriodic = signal.IsPeriodic
-
-    for i in range(normalizedSignal.N1):
-        if normalizedSignal.SignalType==1:
-            normalizedAmplitude=normalizedSignal.data[i][0]
-        else:
-            normalizedAmplitude=normalizedSignal.data[i]
-        
-        if normalizedAmplitude>0.5:
-            resultantSignal.data[i]=normalizedAmplitude
-
-    resultantSignal.N1=len(resultantSignal.data)
-
-    if write:
-        writeSignal(resultantSignal,signalCounter)
-        signalCounter+=1
-    
-    return readSignal
-
-def removeDcComponent(signal:SignalData, write:bool=True):
-    global signalCounter
-
-    resultantSignal:SignalData = signal
-    del resultantSignal.data[0]
-
-    if write:
-        writeSignal(resultantSignal,signalCounter)
-        signalCounter+=1
-    
-    return resultantSignal
-
 def IDFT(signal:SignalData,write:bool=True):
     global signalCounter
 
     resultantSignal:SignalData = SignalData()
+    resultantSignal.SignalType = not signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+    length = resultantSignal.N1 = signal.N1
     
+    for n in range(length):
+        frequency=0
+        for k in range(length):
+            frequency+=signal.data[k][0] * math.e ** ((1j * math.pi * n * k)/length)
+        resultantSignal.data[n]=frequency/length
+
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
