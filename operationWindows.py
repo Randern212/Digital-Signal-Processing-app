@@ -88,3 +88,18 @@ def createQuantizationWindow(mode:quantizationType):
     signalEntry.pack()
     bitsOrLevelsEntry.pack()
     quantizeButton.pack()
+
+def createFourierWindow():
+    pass
+
+def createDisplayDomFreqWindow():
+    pass
+
+def createAmplitudeModificationWindow():
+    pass
+
+def createDCRemovalWindow():
+    pass
+
+def createIDFTReconstructionWindow():
+    pass
