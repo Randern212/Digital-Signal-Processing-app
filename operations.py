@@ -281,7 +281,7 @@ def removeDcComponent(signal:SignalData, write:bool=True):
     
     return resultantSignal
 
-def DFT(signal:SignalData,write:bool=True, plot:bool=True):
+def DFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=True):
     global signalCounter
     
     resultantSignal:SignalData = SignalData()
@@ -306,7 +306,8 @@ def DFT(signal:SignalData,write:bool=True, plot:bool=True):
         signalCounter+=1
 
     if plot:
-        discreteRepresentation(resultantSignal)
+        step:float=(2*math.pi)/length*(1/1000*samplingFrequency)
+        discreteRepresentation(resultantSignal,step)
     
     return resultantSignal
 

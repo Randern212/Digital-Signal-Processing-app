@@ -93,7 +93,7 @@ def createFourierWindow():
     fourierWindow:Toplevel=Toplevel()
     signalEntry:Entry=Entry(fourierWindow)
     samplingFrequencyEntry:Entry=Entry(fourierWindow)
-    transformButton:Button=Button(fourierWindow,text="Transform",command=lambda:DFT(targetSignals[int(signalEntry.get())]))
+    transformButton:Button=Button(fourierWindow,text="Transform",command=lambda:DFT(targetSignals[int(signalEntry.get())],float(samplingFrequencyEntry.get())))
 
     signalEntry.pack()
     samplingFrequencyEntry.pack()
