@@ -26,7 +26,7 @@ def readSignal(filePath:str)->SignalData:
                     frequency = float(values[0])
                     amplitude = float(values[1])
                     phaseShift = float(values[2])
-                    returnSignal.data[i] = (frequency,amplitude, phaseShift)
+                    returnSignal.data[frequency] = (amplitude, phaseShift)
     return returnSignal
 
 def writeSignal(signal, index:int, mode:WriteMethod = WriteMethod.normal, numberOfBits:int = 0):
@@ -45,13 +45,13 @@ def writeSignal(signal, index:int, mode:WriteMethod = WriteMethod.normal, number
 
 def writeModeNoraml(signal,signalFile):
     if signal.SignalType == 0:
-        sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
-        for i, amplitude in sorted_items:
+        sortedItems = sorted(signal.data.items(), key=lambda x: x[0])
+        for i, amplitude in sortedItems:
             signalFile.write(f"{i} {amplitude}\n")
     else:  
-        sorted_items = sorted(signal.data.items(), key=lambda x: x[0])
-        for i, (frequency, amplitude, phase_shift) in sorted_items:
-            signalFile.write(f"{frequency} {amplitude} {phase_shift}\n")
+        sortedItems = sorted(signal.data.items(), key=lambda x: x[0])
+        for  frequency, (amplitude, phaseShift) in sortedItems:
+            signalFile.write(f"{frequency} {amplitude} {phaseShift}\n")
 
 def writeModeQuantizedBits(signal, signalFile, numberOfBits:int):
     if signal.SignalType == 0:

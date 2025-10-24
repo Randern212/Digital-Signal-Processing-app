@@ -134,11 +134,18 @@ def normalizePeak(signal:SignalData, write:bool=True):
     resultantSignal.SignalType=signal.SignalType
     resultantSignal.IsPeriodic=signal.IsPeriodic
     resultantSignal.N1=signal.N1
-    maxValue:float=abs(max(signal.data.values()))
 
-    for index in signal.data.keys():
-        resultantSignal.data[index]=signal.data[index]/maxValue
-    
+    if resultantSignal.SignalType==0:
+        maxValue:float=abs(max(signal.data.values()))
+
+        for index in signal.data.keys():
+            resultantSignal.data[index]=signal.data[index]/maxValue
+    else:
+        maxValue:float=abs(max(signal.data,key=lambda pair:pair[0])[0])
+
+        for frequency,(amplitude,phase) in signal.data.items():
+            resultantSignal.data[frequency]=(amplitude/maxValue,phase)
+
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
@@ -229,5 +236,29 @@ def quantizeSignalByLevels(signal:SignalData, numberOfLevels:int, write:bool=Tru
     
     return resultantSignal
 
-def DFT(signal:SignalData):
-    pass
+def DFT(signal:SignalData,write:bool=True):
+    global signalCounter
+    
+    resultantSignal:SignalData = SignalData()
+    resultantSignal.SignalType = not signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+    resultantSignal.N1 = signal.N1
+    
+    frequencies = signal.data.keys()
+    length:int=len(frequencies)
+    
+    for k in frequencies:
+        amplitude=0
+        for n in range(frequencies):
+            amplitude += n * pow(math.e,(-1j*2*math.pi*k*n)/length)
+
+        phase:float = (2 * math.pi * k)/length
+        resultantSignal.data[k] = (amplitude, phase)
+    
+    resultantSignal = normalizePeak(resultantSignal,False)
+
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
+    return resultantSignal

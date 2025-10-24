@@ -29,11 +29,11 @@ generationMenu.add_command(label="Cosinusoidal",command=lambda:createGenerationW
 frequencyMenu:Menu=Menu(menuBar,tearoff=0)
 
 menuBar.add_cascade(label="Frequency Domain",menu=frequencyMenu)
-frequencyMenu.add_command(label="Fourier Transform", command=createFourierWindow())
-frequencyMenu.add_command(label="Display Dominant Frequencies", command=createDisplayDomFreqWindow())
-frequencyMenu.add_command(label="Modify the Amplitude",command=createAmplitudeModificationWindow())
-frequencyMenu.add_command(label="Remove a DC component",command=createDCRemovalWindow())
-frequencyMenu.add_command(label="IDFT Reconstruction",command=createIDFTReconstructionWindow())
+frequencyMenu.add_command(label="Fourier Transform", command=createFourierWindow)
+frequencyMenu.add_command(label="Display Dominant Frequencies", command=createDisplayDomFreqWindow)
+frequencyMenu.add_command(label="Modify the Amplitude",command=createAmplitudeModificationWindow)
+frequencyMenu.add_command(label="Remove a DC component",command=createDCRemovalWindow)
+frequencyMenu.add_command(label="IDFT Reconstruction",command=createIDFTReconstructionWindow)
 #==============================================================================
 
 targetedSignalEntry:Entry=Entry(mainWindow)
