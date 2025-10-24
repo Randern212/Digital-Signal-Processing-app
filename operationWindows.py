@@ -90,7 +90,14 @@ def createQuantizationWindow(mode:quantizationType):
     quantizeButton.pack()
 
 def createFourierWindow():
-    pass
+    fourierWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(fourierWindow)
+    samplingFrequencyEntry:Entry=Entry(fourierWindow)
+    transformButton:Button=Button(Label="Transform",command=lambda:DFT(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    samplingFrequencyEntry.pack()
+    transformButton.pack()
 
 def createDisplayDomFreqWindow():
     pass
