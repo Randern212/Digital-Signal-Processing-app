@@ -4,6 +4,7 @@ from buttonFunctions import *
 from signalReader import *
 import math
 from QuantizedSignal import *
+from plotFunctions import *
 class operation(Enum):
     addition=0
     subtraction=1
@@ -141,7 +142,7 @@ def normalizePeak(signal:SignalData, write:bool=True):
         for index in signal.data.keys():
             resultantSignal.data[index]=signal.data[index]/maxValue
     else:
-        maxValue:float=abs(max(signal.data,key=lambda pair:pair[0])[0])
+        maxValue:float=abs(max(signal.data.values(),key=lambda pair:pair[0])[0])
 
         for frequency,(amplitude,phase) in signal.data.items():
             resultantSignal.data[frequency]=(amplitude/maxValue,phase)
@@ -236,7 +237,7 @@ def quantizeSignalByLevels(signal:SignalData, numberOfLevels:int, write:bool=Tru
     
     return resultantSignal
 
-def DFT(signal:SignalData,write:bool=True):
+def DFT(signal:SignalData,write:bool=True, plot:bool=True):
     global signalCounter
     
     resultantSignal:SignalData = SignalData()
@@ -248,17 +249,21 @@ def DFT(signal:SignalData,write:bool=True):
     length:int=len(frequencies)
     
     for k in frequencies:
-        amplitude=0
-        for n in range(frequencies):
+        amplitude:complex=0
+        for n in frequencies:
             amplitude += n * pow(math.e,(-1j*2*math.pi*k*n)/length)
 
-        phase:float = (2 * math.pi * k)/length
-        resultantSignal.data[k] = (amplitude, phase)
+        phase:float = math.atan(amplitude.imag/amplitude.real)
+        realAmplitude:float = math.sqrt(pow(amplitude.real,2)+pow(amplitude.imag,2))
+        resultantSignal.data[k] = (realAmplitude, phase)
     
     resultantSignal = normalizePeak(resultantSignal,False)
 
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
+
+    if plot:
+        discreteRepresentation(resultantSignal)
     
     return resultantSignal
