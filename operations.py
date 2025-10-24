@@ -319,10 +319,12 @@ def IDFT(signal:SignalData,write:bool=True):
     length = resultantSignal.N1 = signal.N1
     
     for n in range(length):
-        frequency=0
+        term:complex=complex(0,0)
         for k in range(length):
-            frequency+=signal.data[k][0] * math.e ** ((1j * math.pi * n * k)/length)
-        resultantSignal.data[n]=frequency/length
+            amplitude, phase = signal.data[k]
+            complexValue = amplitude * exp(1j * phase)
+            term+=complexValue * math.e ** ((1j * 2 * math.pi * n * k)/length)
+        resultantSignal.data[n]=term.real/length
 
     if write:
         writeSignal(resultantSignal,signalCounter)
