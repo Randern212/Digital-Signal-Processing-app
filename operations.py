@@ -269,7 +269,7 @@ def DFT(signal:SignalData,write:bool=True, plot:bool=True):
 
 def displayDomFrequency(signal:SignalData,write:bool=True):
     global signalCounter
-    
+
     normalizedSignal:SignalData=normalizePeak(signal)
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType = signal.SignalType
@@ -298,6 +298,17 @@ def removeDcComponent(signal:SignalData, write:bool=True):
     resultantSignal:SignalData = signal
     del resultantSignal.data[0]
 
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
+    return resultantSignal
+
+def IDFT(signal:SignalData,write:bool=True):
+    global signalCounter
+
+    resultantSignal:SignalData = SignalData()
+    
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1

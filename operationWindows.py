@@ -120,4 +120,9 @@ def createDCRemovalWindow():
     DCremoverButton.pack()
 
 def createIDFTReconstructionWindow():
-    pass
+    reconstructionWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(reconstructionWindow)
+    reconstructionButton:Button=Button(reconstructionWindow,text="Remove DC component",command=lambda:removeDcComponent(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    reconstructionButton.pack()
