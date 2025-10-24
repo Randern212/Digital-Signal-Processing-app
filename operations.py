@@ -266,3 +266,13 @@ def DFT(signal:SignalData,write:bool=True, plot:bool=True):
         discreteRepresentation(resultantSignal)
     
     return resultantSignal
+
+def displayDomFrequency(signal:SignalData,write:bool=True):
+    global signalCounter
+
+    resultantSignal:SignalData=SignalData()
+    
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    return readSignal

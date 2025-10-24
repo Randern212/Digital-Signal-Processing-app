@@ -100,7 +100,13 @@ def createFourierWindow():
     transformButton.pack()
 
 def createDisplayDomFreqWindow():
-    pass
+    domFrequencyWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(domFrequencyWindow)
+    domFrequencyButton:Button=Button(domFrequencyWindow,text="View Dominant Frequencies",command=lambda:displayDomFrequency(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    domFrequencyButton.pack()
+
 
 def createAmplitudeModificationWindow():
     pass
