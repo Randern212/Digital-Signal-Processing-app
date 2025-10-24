@@ -112,7 +112,12 @@ def createAmplitudeModificationWindow():
     pass
 
 def createDCRemovalWindow():
-    pass
+    DCremoverWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(DCremoverWindow)
+    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:removeDcComponent(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    DCremoverButton.pack()
 
 def createIDFTReconstructionWindow():
     pass
