@@ -269,10 +269,25 @@ def DFT(signal:SignalData,write:bool=True, plot:bool=True):
 
 def displayDomFrequency(signal:SignalData,write:bool=True):
     global signalCounter
-
+    normalizedSignal:SignalData=normalizePeak(signal)
     resultantSignal:SignalData=SignalData()
-    
+    resultantSignal.SignalType = signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+
+    for i in range(normalizedSignal.N1):
+        if normalizedSignal.SignalType==1:
+            normalizedAmplitude=normalizedSignal.data[i][0]
+        else:
+            normalizedAmplitude=normalizedSignal.data[i]
+        
+        if normalizedAmplitude>0.5:
+            resultantSignal.data[i]=normalizedAmplitude
+
+    resultantSignal.N1=len(resultantSignal.data)
+
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
+    
+
     return readSignal
