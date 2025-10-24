@@ -18,7 +18,6 @@ class quantizationType(Enum):
 
 def addSignals():
     global signalList
-    global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType = signalList[0].SignalType
     resultantSignal.IsPeriodic = all(signal.IsPeriodic for signal in signalList)
@@ -27,13 +26,13 @@ def addSignals():
         for signal in signalList:
             res+=signal.data[i]
         resultantSignal.data[i]=res
-    writeSignal(resultantSignal,signalCounter)
-    signalCounter+=1
     signalList=[]
+
+    return resultantSignal
+
 
 def subtractSignals():
     global signalList
-    global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType = signalList[0].SignalType
     resultantSignal.IsPeriodic = all(signal.IsPeriodic for signal in signalList)
@@ -46,12 +45,11 @@ def subtractSignals():
             else:
                 sub-=signal.data[i]
         resultantSignal.data[i]=sub
-    writeSignal(resultantSignal,signalCounter)
-    signalCounter+=1
     signalList=[]
 
+    return resultantSignal
 
-def multiplySignal(signal:SignalData,constant:float):
+def multiplySignal(signal:SignalData,constant:float,write:bool=True):
     global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=signal.SignalType
@@ -59,10 +57,13 @@ def multiplySignal(signal:SignalData,constant:float):
     resultantSignal.N1=signal.N1
     for index in signal.data.keys():
         resultantSignal.data[index]=signal.data[index]*constant
-    writeSignal(resultantSignal,signalCounter)
-    signalCounter+=1
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
 
-def squareSignal(signal:SignalData):
+    return resultantSignal
+
+def squareSignal(signal:SignalData,write:bool=True):
     global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=signal.SignalType
@@ -70,10 +71,14 @@ def squareSignal(signal:SignalData):
     resultantSignal.N1=signal.N1
     for index in signal.data.keys():
         resultantSignal.data[index]=signal.data[index]*signal.data[index]
-    writeSignal(resultantSignal,signalCounter)
-    signalCounter+=1
+    
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
+    return resultantSignal
 
-def accumulateSignal(signal:SignalData):
+def accumulateSignal(signal:SignalData, write:bool=True):
     global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=signal.SignalType
@@ -83,18 +88,28 @@ def accumulateSignal(signal:SignalData):
     for index in signal.data.keys():
         resSum+=signal.data[index]
         resultantSignal.data[index]=resSum
-    writeSignal(resultantSignal,signalCounter)
-    signalCounter+=1
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
 
+    return resultantSignal
 
-def calculate(mode:operation):
+def calculate(mode:operation,write:bool=True):
+    global signalCounter
+    resultantSignal=None
     match mode:
         case operation.addition:
-            addSignals()
+            resultantSignal=addSignals()
         case operation.subtraction:
-            subtractSignals()
+            resultantSignal=subtractSignals()
+    
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
 
-def normalizeMinMax(signal:SignalData):
+    return resultantSignal
+
+def normalizeMinMax(signal:SignalData,write:bool=True):
     global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=signal.SignalType
@@ -107,11 +122,13 @@ def normalizeMinMax(signal:SignalData):
 
     for index in signal.data.keys():
         resultantSignal.data[index]=(signal.data[index]-minValue)/(maxValue-minValue)
-    
-    writeSignal(resultantSignal,signalCounter)
-    signalCounter+=1
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
 
-def normalizePeak(signal:SignalData):
+    return resultantSignal
+
+def normalizePeak(signal:SignalData, write:bool=True):
     global signalCounter
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=signal.SignalType
@@ -122,9 +139,11 @@ def normalizePeak(signal:SignalData):
     for index in signal.data.keys():
         resultantSignal.data[index]=signal.data[index]/maxValue
     
-    writeSignal(resultantSignal,signalCounter)
-    signalCounter+=1
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
 
+    return resultantSignal
 
 def generateSignal(amplitude:float,phaseShift:float,analogF:float,samplingF:float,trigFunc:callable):
     global signalCounter
@@ -200,9 +219,15 @@ def createRanges(numberOfLevels:int,min:float,max:float,delta:float):
 
     return rangeList, midpointsList
 
-def quantizeSignalByLevels(signal:SignalData, numberOfLevels:int):
+def quantizeSignalByLevels(signal:SignalData, numberOfLevels:int, write:bool=True):
     global signalCounter
     numberOfBits:int=int(math.log2(numberOfLevels))
     resultantSignal=quantizeSignalByBits(signal,numberOfBits,write=False)
-    writeSignal(resultantSignal,signalCounter,WriteMethod.quantizedLevels,numberOfBits)
-    signalCounter+=1
+    if write:
+        writeSignal(resultantSignal,signalCounter,WriteMethod.quantizedLevels,numberOfBits)
+        signalCounter+=1
+    
+    return resultantSignal
+
+def DFT(signal:SignalData):
+    pass
