@@ -6,6 +6,7 @@ import math
 from QuantizedSignal import *
 from plotFunctions import *
 from cmath import *
+from signalcompare import *
 class operation(Enum):
     addition=0
     subtraction=1
@@ -288,10 +289,12 @@ def DFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
     resultantSignal.SignalType = not signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
     resultantSignal.N1 = signal.N1
-    
+    amplitudesOutput=[]
+    phasesOutput=[]
     frequencies = signal.data.keys()
     length:int = signal.N1
     
+
     for k in frequencies:
         amplitude:complex=0
         for n in frequencies:
@@ -299,8 +302,24 @@ def DFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
 
         phaseValue:float = phase(amplitude)
         realAmplitude:float = math.sqrt(amplitude.real**2+amplitude.imag**2)
+        amplitudesOutput.append(realAmplitude)
+        phasesOutput.append(phaseValue)
         resultantSignal.data[k] = (realAmplitude, phaseValue)
+
+    #Testing=========================================================================
+    expectedAmp=[]
+    expectedPhase=[]
+    expectedOutput=readSignal("DFT\DFToutput.txt",True)
+    for a,p in expectedOutput.data.values():
+        expectedAmp.append(a)
+        expectedPhase.append(p)
     
+    if SignalComapreAmplitude(expectedAmp,amplitudesOutput) and SignalComaprePhaseShift(expectedPhase,phasesOutput):
+        print("====================================================PASSED================================================================")
+    else:
+        print("------------------------------------------Failed--------------------------------------------------")
+    #================================================================================
+
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
@@ -325,7 +344,17 @@ def IDFT(signal:SignalData,write:bool=True):
             amplitude, phase = signal.data[k]
             complexValue = amplitude * exp(1j * phase)
             term+=complexValue * math.e ** ((1j * 2 * math.pi * n * k)/length)
+        
         resultantSignal.data[n]=term.real/length
+
+
+    #Testing=========================================================================
+    expectedOutput=readSignal("IDFT\Output_Signal_IDFT.txt")
+    if (SignalComapreAmplitude(expectedOutput.data,resultantSignal.data)):
+        print("====================================================PASSED================================================================")
+    else:
+        print("------------------------------------------Failed--------------------------------------------------")
+    #================================================================================
 
     if write:
         writeSignal(resultantSignal,signalCounter)
