@@ -269,12 +269,14 @@ def removeDcComponent(signal:SignalData, write:bool=True):
     resultantSignal:SignalData = SignalData()
     resultantSignal.SignalType = signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
-    resultantSignal.N1 = signal.N1-1
+    resultantSignal.N1 = signal.N1
 
-    for freq, component in signal.data.items():
-        if freq != 0:  # Skip DC
-            resultantSignal.data[freq] = component
-
+    meanDC = sum(signal.data.values()) / signal.N1
+    
+    for index, amplitude in signal.data.items():
+        resultantAMP = amplitude - meanDC
+        resultantSignal.data[index] = resultantAMP
+    
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
