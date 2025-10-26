@@ -7,6 +7,7 @@ from QuantizedSignal import *
 from plotFunctions import *
 from cmath import *
 from signalcompare import *
+from DC.CompareSignals import *
 class operation(Enum):
     addition=0
     subtraction=1
@@ -270,11 +271,21 @@ def removeDcComponent(signal:SignalData, write:bool=True):
     resultantSignal:SignalData = SignalData()
     resultantSignal.SignalType = signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
-    resultantSignal.N1 = signal.N1-1
+    resultantSignal.N1 = signal.N1
+    
+    amplitudesOutput=[]
+    indicesOutput=[]
 
-    for freq, component in signal.data.items():
-        if freq != 0:  # Skip DC
-            resultantSignal.data[freq] = component
+    meanDC = sum(signal.data.values()) / signal.N1
+    
+    for index, amplitude in signal.data.items():
+        resultantAMP = amplitude - meanDC
+        resultantSignal.data[index] = resultantAMP
+        indicesOutput.append(index)
+        amplitudesOutput.append(index)
+
+    
+    SignalsAreEqual("DC Component","DC\DC_component_output.txt",indicesOutput,amplitudesOutput)
 
     if write:
         writeSignal(resultantSignal,signalCounter)
