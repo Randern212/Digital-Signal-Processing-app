@@ -18,6 +18,10 @@ class quantizationType(Enum):
     bits=0
     levels=1
 
+class modificationTarget(Enum):
+    amp=0
+    phase=1
+
 def addSignals():
     global signalList
     resultantSignal:SignalData=SignalData()
@@ -334,3 +338,10 @@ def IDFT(signal:SignalData,write:bool=True):
         signalCounter+=1
     
     return resultantSignal
+
+def modifyValue(signal:SignalData,dataIndex:int,dataValue:float,mode:modificationTarget):
+    oldAmplitude,oldPhase=signal.data[dataIndex]
+    if mode==modificationTarget.amp:
+        signal.data[dataIndex]=(dataValue,oldPhase)
+    else:
+        signal.data[dataIndex]=(oldAmplitude,dataValue)
