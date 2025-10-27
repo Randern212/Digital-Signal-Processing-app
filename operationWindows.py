@@ -114,12 +114,12 @@ def createModificationWindow(mode:modificationTarget):
     indexEntry:Entry=Entry(modificationWindow)
     dataEntry:Entry=Entry(modificationWindow)
 
-    DCremoverButton:Button=Button(modificationWindow,text="Remove DC component",command=lambda:modifyValue(targetSignals[int(signalEntry.get())],int(indexEntry.get()),float(dataEntry.get()),mode))
+    modificationButton:Button=Button(modificationWindow,text="Modify data",command=lambda:modifyValue(targetSignals[int(signalEntry.get())],int(indexEntry.get()),float(dataEntry.get()),mode))
 
     signalEntry.pack()
     indexEntry.pack()
     dataEntry.pack()
-    DCremoverButton.pack()
+    modificationButton.pack()
 
 
 def createDCRemovalWindow():
