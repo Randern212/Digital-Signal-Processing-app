@@ -108,8 +108,18 @@ def createDisplayDomFreqWindow():
     domFrequencyButton.pack()
 
 
-def createAmplitudeModificationWindow():
-    pass
+def createModificationWindow(mode:modificationTarget):
+    modificationWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(modificationWindow)
+    indexEntry:Entry=Entry(modificationWindow)
+    dataEntry:Entry=Entry(modificationWindow)
+
+    modificationButton:Button=Button(modificationWindow,text="Modify data",command=lambda:modifyValue(targetSignals[int(signalEntry.get())],int(indexEntry.get()),float(dataEntry.get()),mode))
+
+    signalEntry.pack()
+    indexEntry.pack()
+    dataEntry.pack()
+    modificationButton.pack()
 
 def createDCRemovalWindow():
     DCremoverWindow:Toplevel=Toplevel()
