@@ -328,7 +328,7 @@ def FFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
     amplitudes=recurseFFT(signal.data)
     for i in range(resultantSignal.N1):
         phaseValue:float = phase(amplitudes[i])
-        realAmplitude:float=sqrt(amplitudes[i].real**2+amplitudes[i].imag**2)
+        realAmplitude:float = math.sqrt(amplitudes[i].real**2+amplitudes[i].imag**2)
         resultantSignal.data[i] = (realAmplitude, phaseValue)
 
 
