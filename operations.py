@@ -317,6 +317,32 @@ def DFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
     
     return resultantSignal
 
+def FFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=True):
+    global signalCounter
+    
+    resultantSignal:SignalData = SignalData()
+    resultantSignal.SignalType = not signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+    resultantSignal.N1 = signal.N1
+    recurseFFT(signal.data)
+
+def recurseFFT(X):
+    length=len(X)
+    if length==2:
+        return {X[0]+X[1],X[0]-X[1]}
+    else:
+        evenL:list
+        oddL:list
+        for x in X:
+            if x%2==0:
+                evenL.append(x)
+            else:
+                oddL.append(x)
+            fft1=recurseFFT(evenL)
+            fft2=recurseFFT(oddL)
+        for i in range((length/2)-1):
+            pass
+
 def IDFT(signal:SignalData,write:bool=True):
     global signalCounter
 

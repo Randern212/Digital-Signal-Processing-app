@@ -89,11 +89,16 @@ def createQuantizationWindow(mode:quantizationType):
     bitsOrLevelsEntry.pack()
     quantizeButton.pack()
 
-def createFourierWindow():
+def createFourierWindow(performFFT:bool):
+    FTmethod:callable=NONE
+    if performFFT:
+        FTmethod=FFT
+    else:
+        FTmethod=DFT
     fourierWindow:Toplevel=Toplevel()
     signalEntry:Entry=Entry(fourierWindow)
     samplingFrequencyEntry:Entry=Entry(fourierWindow)
-    transformButton:Button=Button(fourierWindow,text="Transform",command=lambda:DFT(targetSignals[int(signalEntry.get())],float(samplingFrequencyEntry.get())))
+    transformButton:Button=Button(fourierWindow,text="Transform",command=lambda:FTmethod(targetSignals[int(signalEntry.get())],float(samplingFrequencyEntry.get())))
 
     signalEntry.pack()
     samplingFrequencyEntry.pack()
