@@ -29,8 +29,8 @@ generationMenu.add_command(label="Cosinusoidal",command=lambda:createGenerationW
 frequencyMenu:Menu=Menu(menuBar,tearoff=0)
 
 menuBar.add_cascade(label="Frequency Domain",menu=frequencyMenu)
-frequencyMenu.add_command(label="Fourier Transform", command=createFourierWindow)
-frequencyMenu.add_command(label="FFT", command=createFourierWindow)
+frequencyMenu.add_command(label="Fourier Transform", command=lambda:createFourierWindow(False))
+frequencyMenu.add_command(label="FFT", command=lambda:createFourierWindow(True))
 frequencyMenu.add_command(label="Display Dominant Frequencies", command=createDisplayDomFreqWindow)
 frequencyMenu.add_command(label="Modify the Amplitude",command=lambda:createModificationWindow(modificationTarget.amp))
 frequencyMenu.add_command(label="Modify the Phase",command=lambda:createModificationWindow(modificationTarget.phase))

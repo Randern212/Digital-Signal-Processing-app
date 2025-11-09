@@ -324,24 +324,49 @@ def FFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
     resultantSignal.SignalType = not signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
     resultantSignal.N1 = signal.N1
+
     recurseFFT(signal.data)
+
+
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+
+    if plot:
+        step:float=(2*math.pi)/resultantSignal.N1*(1/1000*samplingFrequency)
+        discreteRepresentation(resultantSignal,step)
+    
+    return resultantSignal
 
 def recurseFFT(X):
     length=len(X)
-    if length==2:
+    if length<=2:
         return {X[0]+X[1],X[0]-X[1]}
     else:
-        evenL:list
-        oddL:list
+        evenL:list=[]
+        oddL:list=[]
         for x in X:
             if x%2==0:
                 evenL.append(x)
             else:
                 oddL.append(x)
-            fft1=recurseFFT(evenL)
-            fft2=recurseFFT(oddL)
-        for i in range((length/2)-1):
-            pass
+
+        fft1=recurseFFT(evenL)
+        fft2=recurseFFT(oddL)
+        resultantData:list=[]
+
+        for k in range((length/2)-1):
+            w=exp((-1j*2*pi*k)/length)
+            resultantData[k]=butterflyTop(fft1[k],fft2[k],w)
+            resultantData[k+(length/2)]=butterflyDown(fft1[k],fft2[k],w)
+
+        return resultantData
+
+def butterflyTop(fft1, fft2, W):
+    return fft1 + W * fft2
+
+def butterflyDown(fft1, fft2, W):
+    return fft1 - W * fft2
 
 def IDFT(signal:SignalData,write:bool=True):
     global signalCounter
