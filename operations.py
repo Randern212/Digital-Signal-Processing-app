@@ -325,8 +325,9 @@ def FFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
     resultantSignal.IsPeriodic = signal.IsPeriodic
     resultantSignal.N1 = signal.N1
 
-    recurseFFT(signal.data)
-
+    resultantData=recurseFFT(signal.data)
+    for i in range(resultantSignal.N1):
+        resultantSignal.data[i]=resultantData[i]
 
     if write:
         writeSignal(resultantSignal,signalCounter)
@@ -340,22 +341,22 @@ def FFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
 
 def recurseFFT(X):
     length=len(X)
-    if length<=2:
+    if length==2:
         return {X[0]+X[1],X[0]-X[1]}
     else:
         evenL:list=[]
         oddL:list=[]
-        for x in X:
-            if x%2==0:
-                evenL.append(x)
+        for i in range(length):
+            if i%2==0:
+                evenL.append(X[i])
             else:
-                oddL.append(x)
+                oddL.append(X[i])
 
         fft1=recurseFFT(evenL)
         fft2=recurseFFT(oddL)
         resultantData:list=[]
 
-        for k in range((length/2)-1):
+        for k in range(int(length/2)):
             w=exp((-1j*2*pi*k)/length)
             resultantData[k]=butterflyTop(fft1[k],fft2[k],w)
             resultantData[k+(length/2)]=butterflyDown(fft1[k],fft2[k],w)
