@@ -363,8 +363,8 @@ def recurseFFT(X,inverse:bool=False):
             else:
                 oddL.append(X[i])
 
-        fft1=recurseFFT(evenL)
-        fft2=recurseFFT(oddL)
+        fft1=recurseFFT(evenL,inverse)
+        fft2=recurseFFT(oddL,inverse)
         resultantData:list=[0]*length
 
         for k in range(int(length/2)):
@@ -383,7 +383,7 @@ def calculateOmegaFactor(k,N):
     return exp((-1j*2*pi*k)/N)
 
 def caclculateOmegaFactorInverse(k,N):
-    return (1/N)*exp((1j*2*pi*k)/N)
+    return exp((1j*2*pi*k)/N)
 
 def IFFT(signal:SignalData,write:bool=True,):
     global signalCounter
@@ -401,7 +401,7 @@ def IFFT(signal:SignalData,write:bool=True,):
     timeDomainResult=recurseFFT(complexValues,True)
 
     for i in range(length):
-        resultantSignal.data[i]=timeDomainResult[i].real
+        resultantSignal.data[i]=timeDomainResult[i].real/length
 
     if write:
         writeSignal(resultantSignal,signalCounter)
