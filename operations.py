@@ -6,6 +6,10 @@ import math
 from QuantizedSignal import *
 from plotFunctions import *
 from cmath import *
+
+from CompareSignals import*
+from signalcompare import*
+
 class operation(Enum):
     addition=0
     subtraction=1
@@ -274,6 +278,16 @@ def removeDcComponentUsingDFT(signal:SignalData, write:bool=True):
     frequencyDomainSignal=DFT(signal,4000,False,False)
     frequencyDomainSignal.data[0]=(0,0)
     resultantSignal=IDFT(frequencyDomainSignal,True)
+    
+    testIndices=[]
+    testSamples=[]
+
+    for i in range(resultantSignal.N1):
+        testIndices.append(i)
+        testSamples.append(resultantSignal.data[i])
+
+    SignalsAreEqual("DC removal","tests\DC\DC_component_output.txt",testIndices,testSamples)
+
     return resultantSignal
 
 def removeDcComponent(signal:SignalData, write:bool=True):
