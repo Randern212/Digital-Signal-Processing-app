@@ -348,11 +348,30 @@ def FFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
     resultantSignal.IsPeriodic = signal.IsPeriodic
     resultantSignal.N1 = signal.N1
 
+    testAmplitudes=[]
+    testPhases=[]
+
     amplitudes=recurseFFT(signal.data)
     for i in range(resultantSignal.N1):
         phaseValue:float = phase(amplitudes[i])
         realAmplitude:float = math.sqrt(amplitudes[i].real**2+amplitudes[i].imag**2)
         resultantSignal.data[i] = (realAmplitude, phaseValue)
+        testAmplitudes.append(realAmplitude)
+        testPhases.append(phaseValue)
+
+    #Testing=========================================================================
+    expectedAmp=[]
+    expectedPhase=[]
+    expectedOutput=readSignal("tests\Fourier\IDFTinput.txt",True)
+    for a,p in expectedOutput.data.values():
+        expectedAmp.append(a)
+        expectedPhase.append(p)
+    
+    if SignalComapreAmplitude(expectedAmp,testAmplitudes) and SignalComaprePhaseShift(expectedPhase,testPhases):
+        print("====================================================PASSED================================================================")
+    else:
+        print("------------------------------------------Failed--------------------------------------------------")
+    #================================================================================
 
 
     if write:
@@ -363,6 +382,8 @@ def FFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
         step:float=(2*math.pi)/resultantSignal.N1*(1/1000*samplingFrequency)
         discreteRepresentation(resultantSignal,step)
     
+
+
     return resultantSignal
 
 
@@ -423,13 +444,26 @@ def IFFT(signal:SignalData,write:bool=True,):
     
     timeDomainResult=recurseFFT(complexValues,True)
 
+    testAmplitude=[]
     for i in range(length):
-        resultantSignal.data[i]=timeDomainResult[i].real/length
+        resultantSignal.data[i]=round(timeDomainResult[i].real/length)
+        testAmplitude.append(round(timeDomainResult[i].real/length))
 
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-    
+
+    #Testing=========================================================================
+    expectedAmplitudes=[]
+    expectedOutput=readSignal("tests\Fourier\Output_Signal_IDFT.txt")
+    for amp in expectedOutput.data.values():
+        expectedAmplitudes.append(amp)
+    if (SignalComapreAmplitude(expectedAmplitudes,testAmplitude)):
+        print("====================================================PASSED================================================================")
+    else:
+        print("------------------------------------------Failed--------------------------------------------------")
+    #================================================================================
+
     return resultantSignal
 
 def IDFT(signal:SignalData,write:bool=True):
