@@ -342,8 +342,16 @@ def FFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=Tru
     
     return resultantSignal
 
-def recurseFFT(X):
+
+def recurseFFT(X,inverse:bool=False):
     length=len(X)
+    Wfunction=None
+
+    if inverse:
+        Wfunction=caclculateOmegaFactorInverse
+    else:
+        Wfunction=calculateOmegaFactor
+
     if length==2:
         return [X[0]+X[1],X[0]-X[1]]
     else:
@@ -360,16 +368,46 @@ def recurseFFT(X):
         resultantData:list=[0]*length
 
         for k in range(int(length/2)):
-            w=exp((-1j*2*pi*k)/length)
+            w=Wfunction(k, length)
             resultantData[k]=butterflyTop(fft1[k],fft2[k],w)
             resultantData[int(k+(length/2))]=butterflyDown(fft1[k],fft2[k],w)
         return resultantData
-
+    
 def butterflyTop(fft1, fft2, W):
     return fft1 + W * fft2
 
 def butterflyDown(fft1, fft2, W):
     return fft1 - W * fft2
+
+def calculateOmegaFactor(k,N):
+    return exp((-1j*2*pi*k)/N)
+
+def caclculateOmegaFactorInverse(k,N):
+    return (1/N)*exp((1j*2*pi*k)/N)
+
+def IFFT(signal:SignalData,write:bool=True,):
+    global signalCounter
+
+    resultantSignal:SignalData = SignalData()
+    resultantSignal.SignalType = not signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+    length = resultantSignal.N1 = signal.N1
+    
+    complexValues=[]
+    for n in range(length):
+        amplitude, phase = signal.data[n]
+        complexValues.append(amplitude * exp(1j * phase))
+    
+    timeDomainResult=recurseFFT(complexValues,True)
+
+    for i in range(length):
+        resultantSignal.data[i]=timeDomainResult[i].real
+
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
+    return resultantSignal
 
 def IDFT(signal:SignalData,write:bool=True):
     global signalCounter
