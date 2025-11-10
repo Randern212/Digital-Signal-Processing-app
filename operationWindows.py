@@ -135,7 +135,13 @@ def createDCRemovalWindow():
     signalEntry.pack()
     DCremoverButton.pack()
 
-def createIDFTReconstructionWindow():
+def createIDFTReconstructionWindow(performFFT:bool):
+    FTmethod:callable=NONE
+    if performFFT:
+        FTmethod=IFFT
+    else:
+        FTmethod=IDFT
+    
     reconstructionWindow:Toplevel=Toplevel()
 
     pickSignal:Button=Button(reconstructionWindow,
@@ -143,7 +149,7 @@ def createIDFTReconstructionWindow():
                           text="Choose signal file to",
                             font=("times new roman", 12))
     signalEntry:Entry=Entry(reconstructionWindow)
-    reconstructionButton:Button=Button(reconstructionWindow,text="Perform IDFT",command=lambda:IDFT(targetSignals[int(signalEntry.get())]))
+    reconstructionButton:Button=Button(reconstructionWindow,text="Perform IDFT",command=lambda:FTmethod(targetSignals[int(signalEntry.get())]))
     
     pickSignal.pack()
     signalEntry.pack()
