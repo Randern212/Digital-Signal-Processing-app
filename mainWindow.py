@@ -35,6 +35,7 @@ frequencyMenu.add_command(label="Display Dominant Frequencies", command=createDi
 frequencyMenu.add_command(label="Modify the Amplitude",command=lambda:createModificationWindow(modificationTarget.amp))
 frequencyMenu.add_command(label="Modify the Phase",command=lambda:createModificationWindow(modificationTarget.phase))
 frequencyMenu.add_command(label="Remove a DC component",command=createDCRemovalWindow)
+frequencyMenu.add_command(label="Remove a DC component using DFT",command=lambda:createDCRemovalWindow(True))
 frequencyMenu.add_command(label="IDFT Reconstruction",command=lambda:createIDFTReconstructionWindow(False))
 frequencyMenu.add_command(label="IFFT",command=lambda:createIDFTReconstructionWindow(True))
 

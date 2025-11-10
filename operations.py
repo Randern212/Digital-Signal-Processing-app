@@ -267,6 +267,15 @@ def displayDomFrequency(signal:SignalData,write:bool=True):
     
     return readSignal
 
+def removeDcComponentUsingDFT(signal:SignalData, write:bool=True):
+    global signalCounter
+    
+    resultantSignal:SignalData = SignalData()
+    frequencyDomainSignal=DFT(signal,4000,False,False)
+    frequencyDomainSignal.data[0]=(0,0)
+    resultantSignal=IDFT(frequencyDomainSignal,True)
+    return resultantSignal
+
 def removeDcComponent(signal:SignalData, write:bool=True):
     global signalCounter
     

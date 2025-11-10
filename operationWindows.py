@@ -127,10 +127,16 @@ def createModificationWindow(mode:modificationTarget):
     modificationButton.pack()
 
 
-def createDCRemovalWindow():
+def createDCRemovalWindow(useDFT:bool=False):
+    method:callable=NONE
+    if useDFT:
+        method=removeDcComponentUsingDFT
+    else:
+        method=removeDcComponent
+    
     DCremoverWindow:Toplevel=Toplevel()
     signalEntry:Entry=Entry(DCremoverWindow)
-    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:removeDcComponent(targetSignals[int(signalEntry.get())]))
+    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:method(targetSignals[int(signalEntry.get())]))
 
     signalEntry.pack()
     DCremoverButton.pack()
