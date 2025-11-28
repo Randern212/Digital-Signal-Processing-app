@@ -496,17 +496,75 @@ def modifyValue(signal:SignalData,dataIndex:int,dataValue:float,mode:modificatio
         signal.data[dataIndex]=(oldAmplitude,dataValue)
 
 
-def smoothSignal(signal:SignalData,write:bool=True):
-    pass
+def smoothSignal(signal:SignalData,windowSize:int,write:bool=True):
+    resultantSignal = SignalData()
+    resultantSignal.SignalType = signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+    resultantSignal.N1 = signal.N1
+        
+    indices = sorted(signal.data.keys())
+    values = [signal.data[i] for i in indices]
+        
+    for i in range(len(indices)):
+        start = max(0, i - windowSize // 2)
+        end = min(len(indices), i + windowSize // 2 + 1)
+        window_values = values[start:end]
+        avg = sum(window_values) / len(window_values)
+        resultantSignal.data[indices[i]] = avg
+        
+        return resultantSignal
 
 def sharpenSignal1st(signal:SignalData,write:bool=True):
-    pass
+    resultantSignal = SignalData()
+    resultantSignal.SignalType = signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+        
+    indices = sorted(signal.data.keys())
+    resultantSignal.N1 = len(indices) - 1
+        
+    for i in range(1, len(indices)):
+        currentIndex = indices[i]
+        previousIndex = indices[i-1]
+        derivative = signal.data[currentIndex] - signal.data[previousIndex]
+        resultantSignal.data[currentIndex] = derivative
+        
+    return resultantSignal
 
 def sharpenSignal2nd(signal:SignalData,write:bool=True):
-    pass
+    resultantSignal = SignalData()
+    resultantSignal.SignalType = signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+        
+    indices = sorted(signal.data.keys())
+    resultantSignal.N1 = len(indices) - 2
+        
+    for i in range(1, len(indices) - 1):
+        currentIndex = indices[i]
+        nextIndex = indices[i+1]
+        previousIndex = indices[i-1]
+        derivative = (signal.data[nextIndex] - 2 * signal.data[currentIndex] + signal.data[previousIndex])
+        resultantSignal.data[currentIndex] = derivative
+        
+    return resultantSignal
 
-def delayAdvanceSignal(signal:SignalData,write:bool=True):
-    pass
+def delayAdvanceSignal(signal:SignalData,k:int,write:bool=True):
+    resultantSignal = SignalData()
+    resultantSignal.SignalType = signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+    resultantSignal.N1 = signal.N1
+        
+    for index, value in signal.data.items():
+        resultantSignal.data[index - k] = value
+        
+    return resultantSignal
 
 def foldSignal(signal:SignalData,write:bool=True):
-    pass
+    resultantSignal = SignalData()
+    resultantSignal.SignalType = signal.SignalType
+    resultantSignal.IsPeriodic = signal.IsPeriodic
+    resultantSignal.N1 = signal.N1
+        
+    for index, value in signal.data.items():
+            resultantSignal.data[-index] = value
+        
+    return resultantSignal
