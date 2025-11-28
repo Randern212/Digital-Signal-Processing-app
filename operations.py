@@ -494,4 +494,19 @@ def modifyValue(signal:SignalData,dataIndex:int,dataValue:float,mode:modificatio
         signal.data[dataIndex]=(dataValue,oldPhase)
     else:
         signal.data[dataIndex]=(oldAmplitude,dataValue)
-      
+
+
+def smoothSignal(signal:SignalData,write:bool=True):
+    pass
+
+def sharpenSignal1st(signal:SignalData,write:bool=True):
+    pass
+
+def sharpenSignal2nd(signal:SignalData,write:bool=True):
+    pass
+
+def delayAdvanceSignal(signal:SignalData,write:bool=True):
+    pass
+
+def foldSignal(signal:SignalData,write:bool=True):
+    pass

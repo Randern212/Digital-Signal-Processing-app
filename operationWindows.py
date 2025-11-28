@@ -162,33 +162,35 @@ def createIDFTReconstructionWindow(performFFT:bool):
     reconstructionButton.pack()
 
 def createSmoothingWindow():
-    DCremoverWindow:Toplevel=Toplevel()
-    signalEntry:Entry=Entry(DCremoverWindow)
-    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:method(targetSignals[int(signalEntry.get())]))
+    smoothingWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(smoothingWindow)
+    smoothingButton:Button=Button(smoothingWindow,text="Smooth",command=lambda:smoothSignal(targetSignals[int(signalEntry.get())]))
 
     signalEntry.pack()
-    DCremoverButton.pack()
+    smoothingButton.pack()
     
 def createSharpeningWindow():
-    DCremoverWindow:Toplevel=Toplevel()
-    signalEntry:Entry=Entry(DCremoverWindow)
-    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:method(targetSignals[int(signalEntry.get())]))
+    sharpeningWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(sharpeningWindow)
+    sharpening1Button:Button=Button(sharpeningWindow,text="Sharpen",command=lambda:sharpenSignal1st(targetSignals[int(signalEntry.get())]))
+    sharpening2Button:Button=Button(sharpeningWindow,text="Sharpen",command=lambda:sharpenSignal2nd(targetSignals[int(signalEntry.get())]))
 
     signalEntry.pack()
-    DCremoverButton.pack()
+    sharpening1Button.pack()
+    sharpening2Button.pack()
 
 def createDelayingWindow():
-    DCremoverWindow:Toplevel=Toplevel()
-    signalEntry:Entry=Entry(DCremoverWindow)
-    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:method(targetSignals[int(signalEntry.get())]))
+    delayingWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(delayingWindow)
+    delayingButton:Button=Button(delayingWindow,text="delay",command=lambda:delayAdvanceSignal(targetSignals[int(signalEntry.get())]))
 
     signalEntry.pack()
-    DCremoverButton.pack()
+    delayingButton.pack()
 
 def createFoldingWindow():
-    DCremoverWindow:Toplevel=Toplevel()
-    signalEntry:Entry=Entry(DCremoverWindow)
-    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:method(targetSignals[int(signalEntry.get())]))
+    foldingWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(foldingWindow)
+    foldingButton:Button=Button(foldingWindow,text="fold",command=lambda:foldSignal(targetSignals[int(signalEntry.get())]))
 
     signalEntry.pack()
-    DCremoverButton.pack()
+    foldingButton.pack()
