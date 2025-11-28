@@ -164,9 +164,11 @@ def createIDFTReconstructionWindow(performFFT:bool):
 def createSmoothingWindow():
     smoothingWindow:Toplevel=Toplevel()
     signalEntry:Entry=Entry(smoothingWindow)
-    smoothingButton:Button=Button(smoothingWindow,text="Smooth",command=lambda:smoothSignal(targetSignals[int(signalEntry.get())]))
+    sizeEntry:Entry=Entry(smoothingWindow)
+    smoothingButton:Button=Button(smoothingWindow,text="Smooth",command=lambda:smoothSignal(targetSignals[int(signalEntry.get())],int(sizeEntry.get())))
 
     signalEntry.pack()
+    sizeEntry.pack()
     smoothingButton.pack()
     
 def createSharpeningWindow():
@@ -182,9 +184,11 @@ def createSharpeningWindow():
 def createDelayingWindow():
     delayingWindow:Toplevel=Toplevel()
     signalEntry:Entry=Entry(delayingWindow)
-    delayingButton:Button=Button(delayingWindow,text="delay",command=lambda:delayAdvanceSignal(targetSignals[int(signalEntry.get())]))
+    KEntry:Entry=Entry(delayingWindow)
+    delayingButton:Button=Button(delayingWindow,text="delay",command=lambda:delayAdvanceSignal(targetSignals[int(signalEntry.get())],int(KEntry.get())))
 
     signalEntry.pack()
+    KEntry.pack()
     delayingButton.pack()
 
 def createFoldingWindow():
