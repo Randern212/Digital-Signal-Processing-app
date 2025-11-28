@@ -497,6 +497,8 @@ def modifyValue(signal:SignalData,dataIndex:int,dataValue:float,mode:modificatio
 
 
 def smoothSignal(signal:SignalData,windowSize:int,write:bool=True):
+    global signalCounter
+
     resultantSignal = SignalData()
     resultantSignal.SignalType = signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
@@ -519,6 +521,8 @@ def smoothSignal(signal:SignalData,windowSize:int,write:bool=True):
     return resultantSignal
 
 def sharpenSignal1st(signal:SignalData,write:bool=True):
+    global signalCounter
+
     resultantSignal = SignalData()
     resultantSignal.SignalType = signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
@@ -539,6 +543,8 @@ def sharpenSignal1st(signal:SignalData,write:bool=True):
     return resultantSignal
 
 def sharpenSignal2nd(signal:SignalData,write:bool=True):
+    global signalCounter
+
     resultantSignal = SignalData()
     resultantSignal.SignalType = signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
@@ -560,11 +566,13 @@ def sharpenSignal2nd(signal:SignalData,write:bool=True):
     return resultantSignal
 
 def delayAdvanceSignal(signal:SignalData,k:int,write:bool=True):
+    global signalCounter
+
     resultantSignal = SignalData()
     resultantSignal.SignalType = signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
     resultantSignal.N1 = signal.N1
-        
+    k*=-1    
     for index, value in signal.data.items():
         resultantSignal.data[index - k] = value
         
@@ -575,6 +583,8 @@ def delayAdvanceSignal(signal:SignalData,k:int,write:bool=True):
     return resultantSignal
 
 def foldSignal(signal:SignalData,write:bool=True):
+    global signalCounter
+
     resultantSignal = SignalData()
     resultantSignal.SignalType = signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
