@@ -39,6 +39,14 @@ frequencyMenu.add_command(label="Remove a DC component using DFT",command=lambda
 frequencyMenu.add_command(label="IDFT Reconstruction",command=lambda:createIDFTReconstructionWindow(False))
 frequencyMenu.add_command(label="IFFT",command=lambda:createIDFTReconstructionWindow(True))
 
+timeMenu:Menu=Menu(menuBar,tearoff=0)
+
+menuBar.add_cascade(label="Time Domain",menu=timeMenu)
+timeMenu.add_command(label="Smoothing",command=createSmoothingWindow)
+timeMenu.add_command(label="Sharpening",command=createSharpeningWindow)
+timeMenu.add_command(label="Delaying/Advancing",command=createDelayingWindow)
+timeMenu.add_command(label="Folding",command=createFoldingWindow)
+
 #==============================================================================
 
 targetedSignalEntry:Entry=Entry(mainWindow)

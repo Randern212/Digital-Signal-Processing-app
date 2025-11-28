@@ -160,3 +160,35 @@ def createIDFTReconstructionWindow(performFFT:bool):
     pickSignal.pack()
     signalEntry.pack()
     reconstructionButton.pack()
+
+def createSmoothingWindow():
+    DCremoverWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(DCremoverWindow)
+    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:method(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    DCremoverButton.pack()
+    
+def createSharpeningWindow():
+    DCremoverWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(DCremoverWindow)
+    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:method(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    DCremoverButton.pack()
+
+def createDelayingWindow():
+    DCremoverWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(DCremoverWindow)
+    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:method(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    DCremoverButton.pack()
+
+def createFoldingWindow():
+    DCremoverWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(DCremoverWindow)
+    DCremoverButton:Button=Button(DCremoverWindow,text="Remove DC component",command=lambda:method(targetSignals[int(signalEntry.get())]))
+
+    signalEntry.pack()
+    DCremoverButton.pack()

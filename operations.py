@@ -494,3 +494,4 @@ def modifyValue(signal:SignalData,dataIndex:int,dataValue:float,mode:modificatio
         signal.data[dataIndex]=(dataValue,oldPhase)
     else:
         signal.data[dataIndex]=(oldAmplitude,dataValue)
+      
