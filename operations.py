@@ -502,16 +502,14 @@ def smoothSignal(signal:SignalData,windowSize:int,write:bool=True):
     resultantSignal = SignalData()
     resultantSignal.SignalType = signal.SignalType
     resultantSignal.IsPeriodic = signal.IsPeriodic
-    resultantSignal.N1 = signal.N1
+    resultantSignal.N1 = signal.N1 - (windowSize - 1)
         
     indices = sorted(signal.data.keys())
     values = [signal.data[i] for i in indices]
         
-    for i in range(len(indices)):
-        start = max(0, i - windowSize // 2)
-        end = min(len(indices), i + windowSize // 2 + 1)
-        window_values = values[start:end]
-        avg = sum(window_values) / len(window_values)
+    for i in range(resultantSignal.N1):
+        windowSum = sum(values[i:i + windowSize])
+        avg = windowSum / windowSize
         resultantSignal.data[indices[i]] = avg
 
     if write:
