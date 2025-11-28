@@ -511,8 +511,12 @@ def smoothSignal(signal:SignalData,windowSize:int,write:bool=True):
         window_values = values[start:end]
         avg = sum(window_values) / len(window_values)
         resultantSignal.data[indices[i]] = avg
+
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
         
-        return resultantSignal
+    return resultantSignal
 
 def sharpenSignal1st(signal:SignalData,write:bool=True):
     resultantSignal = SignalData()
@@ -528,6 +532,10 @@ def sharpenSignal1st(signal:SignalData,write:bool=True):
         derivative = signal.data[currentIndex] - signal.data[previousIndex]
         resultantSignal.data[currentIndex] = derivative
         
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
     return resultantSignal
 
 def sharpenSignal2nd(signal:SignalData,write:bool=True):
@@ -545,6 +553,10 @@ def sharpenSignal2nd(signal:SignalData,write:bool=True):
         derivative = (signal.data[nextIndex] - 2 * signal.data[currentIndex] + signal.data[previousIndex])
         resultantSignal.data[currentIndex] = derivative
         
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
     return resultantSignal
 
 def delayAdvanceSignal(signal:SignalData,k:int,write:bool=True):
@@ -556,6 +568,10 @@ def delayAdvanceSignal(signal:SignalData,k:int,write:bool=True):
     for index, value in signal.data.items():
         resultantSignal.data[index - k] = value
         
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
     return resultantSignal
 
 def foldSignal(signal:SignalData,write:bool=True):
@@ -567,4 +583,8 @@ def foldSignal(signal:SignalData,write:bool=True):
     for index, value in signal.data.items():
             resultantSignal.data[-index] = value
         
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
     return resultantSignal
