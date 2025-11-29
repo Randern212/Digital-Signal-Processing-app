@@ -198,3 +198,15 @@ def createFoldingWindow():
 
     signalEntry.pack()
     foldingButton.pack()
+
+def createConvolutionWindow():
+    pass
+
+def createCorrelationWindow():
+    pass
+
+def createAutocorrelationWindow():
+    pass
+
+def createPeriodicCorrelationWindow():
+    pass

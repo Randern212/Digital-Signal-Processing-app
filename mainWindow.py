@@ -46,6 +46,10 @@ timeMenu.add_command(label="Smoothing",command=createSmoothingWindow)
 timeMenu.add_command(label="Sharpening",command=createSharpeningWindow)
 timeMenu.add_command(label="Delaying/Advancing",command=createDelayingWindow)
 timeMenu.add_command(label="Folding",command=createFoldingWindow)
+timeMenu.add_command(label="Convolution",command=createConvolutionWindow)
+timeMenu.add_command(label="Correlation",command=createCorrelationWindow)
+timeMenu.add_command(label="Autocorrelation",command=createAutocorrelationWindow)
+timeMenu.add_command(label="Periodic Correlation",command=createPeriodicCorrelationWindow)
 
 #==============================================================================
 
