@@ -200,7 +200,16 @@ def createFoldingWindow():
     foldingButton.pack()
 
 def createConvolutionWindow():
-    pass
+    convolutionWindow:Toplevel=Toplevel()
+    signalEntry1:Entry=Entry(convolutionWindow)
+    signalEntry2:Entry=Entry(convolutionWindow)
+
+    convolutionButton:Button=Button(convolutionWindow,text="Convolve",command=lambda:convolve(targetSignals[int(signalEntry1.get())],targetSignals[int(signalEntry1.get())]))
+
+    signalEntry1.pack()
+    signalEntry2.pack()
+
+    convolutionButton.pack()
 
 def createCorrelationWindow():
     pass

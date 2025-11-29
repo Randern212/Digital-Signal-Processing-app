@@ -596,3 +596,6 @@ def foldSignal(signal:SignalData,write:bool=True):
         signalCounter+=1
     
     return resultantSignal
+
+def convolve(signal1:SignalData,signal2:SignalData):
+    pass
