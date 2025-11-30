@@ -7,6 +7,7 @@ from QuantizedSignal import *
 from plotFunctions import *
 from cmath import *
 
+from ConvTest import *
 from CompareSignals import*
 from signalcompare import*
 
@@ -622,5 +623,6 @@ def convolve(signal1:SignalData,signal2:SignalData,write:bool=True):
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
+        ConvTest(list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
     
     return resultantSignal    
