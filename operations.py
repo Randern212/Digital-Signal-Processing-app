@@ -597,9 +597,9 @@ def foldSignal(signal:SignalData,write:bool=True):
     
     return resultantSignal
 
-def convolve(signal1:SignalData,signal2:SignalData):
- 
-
+def convolve(signal1:SignalData,signal2:SignalData,write:bool=True):
+    global signalCounter
+    
     resultantSignal:SignalData = SignalData()
     resultantSignal.IsPeriodic=signal1.IsPeriodic or signal2.IsPeriodic
     resultantSignal.SignalType=0
@@ -619,5 +619,8 @@ def convolve(signal1:SignalData,signal2:SignalData):
                 Yn+=signal1.data[k] * signal2.data[i-k]
         resultantSignal.data[i]=Yn
 
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
     
     return resultantSignal    
