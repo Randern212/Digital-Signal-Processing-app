@@ -628,4 +628,30 @@ def convolve(signal1:SignalData,signal2:SignalData,write:bool=True):
     return resultantSignal    
 
 def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
-    pass
+    global signalCounter
+
+    resultantSignal = SignalData()
+    resultantSignal.SignalType = 0
+    resultantSignal.IsPeriodic = 0
+    resultantSignal.N1 = signal1.N1
+    
+    sumOfSamples1=sum(x*x for x in list(signal1.data.values()))
+    sumOfSamples2=sum(x*x for x in list(signal2.data.values()))
+    denominator=(((sumOfSamples1*sumOfSamples2))**(1/2))/resultantSignal.N1
+    
+    for j in range(resultantSignal.N1):
+        rN = 0
+        print("new J is:"+str(j))
+        for n in range(signal1.N1):
+            nj=(n+j)%signal1.N1
+            print(nj)
+            rN+=signal1.data[n]*signal2.data[nj]
+        print("rN ="+str(rN))
+        pN = (rN/resultantSignal.N1)/denominator
+        resultantSignal.data[j] = pN
+
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
+    return resultantSignal
