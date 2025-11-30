@@ -6,6 +6,7 @@ import math
 from QuantizedSignal import *
 from plotFunctions import *
 from cmath import *
+from collections import deque
 
 from ConvTest import *
 from CompareSignals import*
@@ -644,10 +645,8 @@ def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
             rN+=(signal1.data[n]*signal2.data[nj])/resultantSignal.N1
         r[j]=rN
 
-    sumOfSamples1=sum(x*x for x in list(signal1.data.values()))
-    sumOfSamples2=sum(x*x for x in list(signal2.data.values()))
-    
-    calculatePCorrelation(resultantSignal,sumOfSamples1,sumOfSamples2,r)
+
+    calculatePCorrelation(resultantSignal,signal1,signal2,r)
 
     if write:
         writeSignal(resultantSignal,signalCounter)
@@ -660,8 +659,11 @@ def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
 def autocorrelate(signal:SignalData,write:bool=True):
     return correlate(signal1=signal,signal2=signal,write=write)
 
-def calculatePCorrelation(resultantSignal,sum1,sum2,r):
-    denominator=(((sum1*sum2))**(1/2))/resultantSignal.N1
+def calculatePCorrelation(resultantSignal,signal1,signal2,r):
+    sumOfSamples1=sum(x*x for x in list(signal1.data.values()))
+    sumOfSamples2=sum(x*x for x in list(signal2.data.values()))
+    
+    denominator=(((sumOfSamples1*sumOfSamples2))**(1/2))/resultantSignal.N1
     for j in range(resultantSignal.N1):
         pN = r[j]/denominator
         resultantSignal.data[j] = pN
@@ -672,9 +674,35 @@ def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=0
     resultantSignal.IsPeriodic=1
+    resultantSignal.N1=signal1.N1+signal2.N1-1
+
+    samples1=list(signal1.data.values())
+    samples2=list(signal2.data.values())
+    r:dict={}
+
+    if len(samples1) >= len(samples2):
+        samplesFixed=samples1
+        samplesToShift=samples2
+    else:
+        samplesFixed=samples2
+        samplesToShift=samples1
+
+    samplesFixed = (samplesFixed + [0] * resultantSignal.N1)[:resultantSignal.N1]
+    samplesToShift = (samplesToShift + [0] * resultantSignal.N1)[:resultantSignal.N1]
+    print(samplesFixed)
+    print(samplesToShift)
+    for n in range(resultantSignal.N1):
+        r[n]=sum(a*b for a,b in zip(samplesFixed,samplesToShift))/resultantSignal.N1
+        d = deque(samplesToShift)
+        d.rotate(-1)
+        samplesToShift = list(d)
+
+    calculatePCorrelation(resultantSignal,signal1,signal2,r)
 
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-    
+
+    Compare_Signals("tests\Correlation (different length)\CorrOutput.txt",list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
+
     return resultantSignal
