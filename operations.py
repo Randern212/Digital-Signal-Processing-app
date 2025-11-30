@@ -641,12 +641,9 @@ def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
     
     for j in range(resultantSignal.N1):
         rN = 0
-        print("new J is:"+str(j))
         for n in range(signal1.N1):
             nj=(n+j)%signal1.N1
-            print(nj)
             rN+=signal1.data[n]*signal2.data[nj]
-        print("rN ="+str(rN))
         pN = (rN/resultantSignal.N1)/denominator
         resultantSignal.data[j] = pN
 
