@@ -626,3 +626,6 @@ def convolve(signal1:SignalData,signal2:SignalData,write:bool=True):
         ConvTest(list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
     
     return resultantSignal    
+
+def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
+    pass
