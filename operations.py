@@ -657,3 +657,6 @@ def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
 
 def autocorrelate(signal:SignalData,write:bool=True):
     return correlate(signal1=signal,signal2=signal,write=write)
+
+def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
+    pass
