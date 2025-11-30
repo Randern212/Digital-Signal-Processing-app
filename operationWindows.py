@@ -204,7 +204,7 @@ def createConvolutionWindow():
     signalEntry1:Entry=Entry(convolutionWindow)
     signalEntry2:Entry=Entry(convolutionWindow)
 
-    convolutionButton:Button=Button(convolutionWindow,text="Convolve",command=lambda:convolve(targetSignals[int(signalEntry1.get())],targetSignals[int(signalEntry1.get())]))
+    convolutionButton:Button=Button(convolutionWindow,text="Convolve",command=lambda:convolve(targetSignals[int(signalEntry1.get())],targetSignals[int(signalEntry2.get())]))
 
     signalEntry1.pack()
     signalEntry2.pack()
