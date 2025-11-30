@@ -635,18 +635,20 @@ def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
     resultantSignal.IsPeriodic = 0
     resultantSignal.N1 = signal1.N1
     
-    sumOfSamples1=sum(x*x for x in list(signal1.data.values()))
-    sumOfSamples2=sum(x*x for x in list(signal2.data.values()))
-    denominator=(((sumOfSamples1*sumOfSamples2))**(1/2))/resultantSignal.N1
-    
+
+    r:dict={}
     for j in range(resultantSignal.N1):
         rN = 0
         for n in range(signal1.N1):
             nj=(n+j)%signal1.N1
-            rN+=signal1.data[n]*signal2.data[nj]
-        pN = (rN/resultantSignal.N1)/denominator
-        resultantSignal.data[j] = pN
+            rN+=(signal1.data[n]*signal2.data[nj])/resultantSignal.N1
+        r[j]=rN
+
+    sumOfSamples1=sum(x*x for x in list(signal1.data.values()))
+    sumOfSamples2=sum(x*x for x in list(signal2.data.values()))
     
+    calculatePCorrelation(resultantSignal,sumOfSamples1,sumOfSamples2,r)
+
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
@@ -658,5 +660,21 @@ def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
 def autocorrelate(signal:SignalData,write:bool=True):
     return correlate(signal1=signal,signal2=signal,write=write)
 
+def calculatePCorrelation(resultantSignal,sum1,sum2,r):
+    denominator=(((sum1*sum2))**(1/2))/resultantSignal.N1
+    for j in range(resultantSignal.N1):
+        pN = r[j]/denominator
+        resultantSignal.data[j] = pN
+
 def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
-    pass
+    global signalCounter
+
+    resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType=0
+    resultantSignal.IsPeriodic=1
+
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+    
+    return resultantSignal
