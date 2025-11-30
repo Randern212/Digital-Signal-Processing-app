@@ -8,11 +8,14 @@ from plotFunctions import *
 from cmath import *
 from collections import deque
 
+#TESTING MODULES=====================================================================
 from ConvTest import *
 from CompareSignals import*
 from signalcompare import*
 from CompareSignal import*
 from Shift_Fold_Signal import*
+from DerivativeSignal import*
+#====================================================================================
 class operation(Enum):
     addition=0
     subtraction=1
@@ -522,6 +525,11 @@ def smoothSignal(signal:SignalData,windowSize:int,write:bool=True):
         Compare_Signals("tests\Moving Average\OutMovAvgTest2.txt",list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
     return resultantSignal
 
+def sharpenSignal(signal:SignalData,write:bool=True):
+    derv1st=sharpenSignal1st(signal,write)
+    derv2nd=sharpenSignal2nd(signal,write)
+    DerivativeSignal(list(derv1st.data.values()),list(derv2nd.data.values()))
+
 def sharpenSignal1st(signal:SignalData,write:bool=True):
     global signalCounter
 
@@ -541,7 +549,7 @@ def sharpenSignal1st(signal:SignalData,write:bool=True):
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-    
+
     return resultantSignal
 
 def sharpenSignal2nd(signal:SignalData,write:bool=True):

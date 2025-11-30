@@ -174,12 +174,15 @@ def createSmoothingWindow():
 def createSharpeningWindow():
     sharpeningWindow:Toplevel=Toplevel()
     signalEntry:Entry=Entry(sharpeningWindow)
-    sharpening1Button:Button=Button(sharpeningWindow,text="Sharpen",command=lambda:sharpenSignal1st(targetSignals[int(signalEntry.get())]))
-    sharpening2Button:Button=Button(sharpeningWindow,text="Sharpen",command=lambda:sharpenSignal2nd(targetSignals[int(signalEntry.get())]))
+    sharpening1Button:Button=Button(sharpeningWindow,text="Sharpen 1st",command=lambda:sharpenSignal1st(targetSignals[int(signalEntry.get())]))
+    sharpening2Button:Button=Button(sharpeningWindow,text="Sharpen 2nd",command=lambda:sharpenSignal2nd(targetSignals[int(signalEntry.get())]))
+    sharpeningButton:Button=Button(sharpeningWindow,text="Sharpen both",command=lambda:sharpenSignal(targetSignals[int(signalEntry.get())]))
 
     signalEntry.pack()
     sharpening1Button.pack()
     sharpening2Button.pack()
+    sharpeningButton.pack()
+
 
 def createDelayingWindow():
     delayingWindow:Toplevel=Toplevel()
