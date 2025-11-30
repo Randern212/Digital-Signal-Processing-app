@@ -598,4 +598,13 @@ def foldSignal(signal:SignalData,write:bool=True):
     return resultantSignal
 
 def convolve(signal1:SignalData,signal2:SignalData):
-    pass
+    resultantSignal:SignalData = SignalData()
+    resultantSignal.IsPeriodic=signal1.IsPeriodic or signal2.IsPeriodic
+    resultantSignal.N1=signal1.N1
+    resultantSignal.SignalType=0
+    for i in range(resultantSignal.N1):
+        Yn=0
+        for k in range(i):
+            Yn+=signal1.data[k] * signal2.data[i-k]
+        resultantSignal.data[i]=Yn
+    return resultantSignal    
