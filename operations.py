@@ -12,6 +12,7 @@ from ConvTest import *
 from CompareSignals import*
 from signalcompare import*
 from CompareSignal import*
+from Shift_Fold_Signal import*
 class operation(Enum):
     addition=0
     subtraction=1
@@ -517,7 +518,8 @@ def smoothSignal(signal:SignalData,windowSize:int,write:bool=True):
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-        
+        Compare_Signals("tests\Moving Average\OutMovAvgTest1.txt",list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
+        Compare_Signals("tests\Moving Average\OutMovAvgTest2.txt",list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
     return resultantSignal
 
 def sharpenSignal1st(signal:SignalData,write:bool=True):
@@ -579,7 +581,9 @@ def delayAdvanceSignal(signal:SignalData,k:int,write:bool=True):
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-    
+        Shift_Fold_Signal("tests\Shifting and Folding\Output_ShifFoldedby500.txt",list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
+        Shift_Fold_Signal("tests\Shifting and Folding\Output_ShiftFoldedby-500.txt",list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
+
     return resultantSignal
 
 def foldSignal(signal:SignalData,write:bool=True):
@@ -596,7 +600,8 @@ def foldSignal(signal:SignalData,write:bool=True):
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-    
+        Shift_Fold_Signal("tests\Shifting and Folding\Output_fold.txt",list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
+
     return resultantSignal
 
 def convolve(signal1:SignalData,signal2:SignalData,write:bool=True):
@@ -689,8 +694,7 @@ def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
 
     samplesFixed = (samplesFixed + [0] * resultantSignal.N1)[:resultantSignal.N1]
     samplesToShift = (samplesToShift + [0] * resultantSignal.N1)[:resultantSignal.N1]
-    print(samplesFixed)
-    print(samplesToShift)
+
     for n in range(resultantSignal.N1):
         r[n]=sum(a*b for a,b in zip(samplesFixed,samplesToShift))/resultantSignal.N1
         d = deque(samplesToShift)
