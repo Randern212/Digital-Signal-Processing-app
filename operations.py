@@ -655,3 +655,6 @@ def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
         signalCounter+=1
     
     return resultantSignal
+
+def autocorrelate(signal:SignalData,write:bool=True):
+    return correlate(signal1=signal,signal2=signal,write=write)
