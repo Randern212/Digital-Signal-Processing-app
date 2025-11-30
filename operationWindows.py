@@ -224,7 +224,11 @@ def createCorrelationWindow():
     correlationButton.pack()
 
 def createAutocorrelationWindow():
-    pass
+    autocorrelationWindow:Toplevel=Toplevel()
+    signalEntry:Entry=Entry(autocorrelationWindow)
+    autocorrelateButton:Button=Button(autocorrelationWindow,text="auto correlate",command=lambda:autocorrelate(targetSignals[int(signalEntry.get())]))
 
+    signalEntry.pack()
+    autocorrelateButton.pack()
 def createPeriodicCorrelationWindow():
     pass
