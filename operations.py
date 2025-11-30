@@ -10,7 +10,7 @@ from cmath import *
 from ConvTest import *
 from CompareSignals import*
 from signalcompare import*
-
+from CompareSignal import*
 class operation(Enum):
     addition=0
     subtraction=1
@@ -646,10 +646,12 @@ def correlate(signal1:SignalData,signal2:SignalData,write:bool=True):
             rN+=signal1.data[n]*signal2.data[nj]
         pN = (rN/resultantSignal.N1)/denominator
         resultantSignal.data[j] = pN
-
+    
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
+    
+    Compare_Signals("tests\Point1 Correlation\CorrOutput.txt",list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
     
     return resultantSignal
 
