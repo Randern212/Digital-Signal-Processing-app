@@ -247,16 +247,41 @@ def createPeriodicCorrelationWindow():
     correlationButton.pack()
 
 def createFIRwindow():
-    FIRwindow:Toplevel=Toplevel()
-    signalEntry:Entry=Entry(FIRwindow)
-    pickFilter:Button=Button(FIRwindow,
-                          command=submitFilter,
-                          text="Choose filter file",
-                            font=("times new roman", 12))
+    FIRwindow = Toplevel()
+    signalEntry = Entry(FIRwindow)
     
-    filterButton:Button=Button(FIRwindow,text="Apply Filter",command=lambda:applyFilter(targetSignals[int(signalEntry.get())]))
-    filterSignalButton:Button=Button(FIRwindow,text="Just Create Filter Signal",command=createFilterSignal)
-
+    # Store the filter object in a variable accessible to both functions
+    pickedFilter = None
+    
+    def handleSubmitFilter():
+        nonlocal pickedFilter  # Use nonlocal if this is nested in another function
+        pickedFilter = submitFilter()  # Assuming submitFilter returns the filter object
+        return pickedFilter
+    
+    def handleCreateFilterSignal():
+        nonlocal pickedFilter
+        if pickedFilter is not None:
+            createFilterSignal(pickedFilter)
+    
+    pickFilter = Button(
+        FIRwindow,
+        command=handleSubmitFilter,
+        text="Choose filter file",
+        font=("times new roman", 12)
+    )
+    
+    filterButton = Button(
+        FIRwindow,
+        text="Apply Filter",
+        command=lambda: applyFilter(targetSignals[int(signalEntry.get())])
+    )
+    
+    filterSignalButton = Button(
+        FIRwindow,
+        text="Just Create Filter Signal",
+        command=handleCreateFilterSignal
+    )
+    
     pickFilter.pack()
     signalEntry.pack()
     filterSignalButton.pack()

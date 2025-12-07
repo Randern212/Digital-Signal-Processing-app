@@ -736,9 +736,9 @@ hanningTransitionWidth:Final = 3.1
 hammingTransitionWidth:Final = 3.3
 blackmanTransitionWidth:Final = 5.5
 
-def createFilterSignal(write:bool=True):
-    global LoadedFilter
+def createFilterSignal(LoadedFilter,write:bool=True):
     global signalCounter
+
 
     windowFuntion:callable
     filterFunction:callable
@@ -775,13 +775,13 @@ def createFilterSignal(write:bool=True):
             filterFunction=bandPassFiltering
         case FilterType.BAND_STOP:
             filterFunction=bandStopFiltering
-    
-    windowRange=range(-(windowLength-1)/2, (windowLength-1)/2)
+
+    windowRange=range(int(-(windowLength-1)/2), int((windowLength-1)/2))
 
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=0
     resultantSignal.IsPeriodic=0
-    resultantSignal.N1==windowLength
+    resultantSignal.N1=windowLength
     
     for n in windowRange:
         resultantSignal.data[n]=filterFunction(n, LoadedFilter.FC, LoadedFilter.F1, LoadedFilter.F2, wc, w1, w2)*windowFuntion(n, windowLength)
@@ -819,11 +819,11 @@ def highPassFiltering(n,fc,f1,f2,w,w1,w2):
 
 def bandPassFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
-        return 2(f2-f1)
+        return 2*(f2-f1)
     return 2*f2*(sin(n*w2)/n*w2)-2*f1*(sin(n*w1)/n*w1)
 
 def bandStopFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
-        return 1-2(f2-f1)
+        return 1-2*(f2-f1)
     return 2*f1*(sin(n*w1)/n*w1)-2*f2*(sin(n*w2)/n*w2)
 # =========================================================
