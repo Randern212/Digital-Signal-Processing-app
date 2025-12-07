@@ -256,7 +256,9 @@ def createFIRwindow():
                             font=("times new roman", 12))
     
     filterButton:Button=Button(FIRwindow,text="Apply Filter",command=lambda:applyFilter(targetSignals[int(signalEntry.get())]))
+    filterSignalButton:Button=Button(FIRwindow,text="Just Create Filter Signal",command=createFilterSignal)
 
     pickFilter.pack()
     signalEntry.pack()
+    filterSignalButton.pack()
     filterButton.pack()

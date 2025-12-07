@@ -724,3 +724,7 @@ def applyFilter(signal:SignalData,write:bool=True):
     global signalCounter
     global LoadedFilter
     pass
+
+def createFilterSignal():
+    global LoadedFilter
+    pass
