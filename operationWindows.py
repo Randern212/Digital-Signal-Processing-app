@@ -248,10 +248,10 @@ def createPeriodicCorrelationWindow():
 
 def createFIRwindow():
     FIRwindow:Toplevel=Toplevel()
-
+    filterType, fs, stopBandAttenuation, fc, transitionBand = None
     signalEntry:Entry=Entry(FIRwindow)
     pickFilter:Button=Button(FIRwindow,
-                          command= readFilter,
+                          command= lambda:submitFilter(filterType, fs, stopBandAttenuation, fc, transitionBand),
                           text="Choose filter file",
                             font=("times new roman", 12))
     

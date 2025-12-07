@@ -1,16 +1,12 @@
 from signalClass import *
 from QuantizedSignal import *
+from filterClass import *
 from enum import Enum
 class WriteMethod(Enum):
     normal=0
     quantizedBits=1
     quantizedLevels=2
 
-class FilterType(Enum):
-    LOW = "low pass"
-    HIGH = "high pass"
-    BAND_PASS = "band pass"
-    BAND_STOP = "band stop"
 
 def readSignal(filePath:str,skipFrequency:bool=False)->SignalData:
     returnSignal:SignalData = SignalData()
@@ -78,7 +74,8 @@ def writeModeQuantizedLevels(signal, signalFile, numberOfBits:int):
             signalFile.write(f"{level+1} {encodedLevel} {amplitude} {signal.error[i]}\n")
             i+=1
 
-def readFilter(filePath:str):
+def readFilter(filePath:str)->Filter:
+    
     filterTypeMap = {
         "low pass": FilterType.LOW,
         "high pass": FilterType.HIGH,
@@ -88,18 +85,17 @@ def readFilter(filePath:str):
     with open(filePath) as f:
         lines = [line.strip().split('=') for line in f if '=' in line]
         parameters = {k.strip(): v.strip() for k, v in lines}
-    
-    fs = int(parameters['FS'])
-    stopBandAttenuation = int(parameters['StopBandAttenuation'])
-    transitionBand = int(parameters['TransitionBand'])
+    resultantFilter:Filter = Filter()
+    resultantFilter.FS = int(parameters['FS'])
+    resultantFilter.stopBandAttenuation = int(parameters['StopBandAttenuation'])
+    resultantFilter.transitionBand = int(parameters['TransitionBand'])
 
-    filterType=filterTypeMap[parameters['FilterType'].lower()]
+    resultantFilter.filterType=filterTypeMap[parameters['FilterType'].lower()]
     
-    if filterType==FilterType.BAND_PASS or filterType==FilterType.BAND_STOP:
-        f1 = float(parameters['F1'])
-        f2 = float(parameters['F2'])
-        return filterType, fs, stopBandAttenuation, (f1 ,f2), transitionBand
-    
-    fc= float(parameters['FC'])
+    if resultantFilter.filterType==FilterType.BAND_PASS or resultantFilter.filterType==FilterType.BAND_STOP:
+        resultantFilter.F1 = float(parameters['F1'])
+        resultantFilter.F2 = float(parameters['F2'])
+    else:    
+        resultantFilter.FC= float(parameters['FC'])
 
-    return filterType, fs, stopBandAttenuation, fc, transitionBand
+    return resultantFilter

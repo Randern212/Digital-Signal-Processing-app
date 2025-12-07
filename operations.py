@@ -722,4 +722,5 @@ def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
 
 def applyFilter(signal:SignalData,write:bool=True):
     global signalCounter
+    global LoadedFilter
     pass
