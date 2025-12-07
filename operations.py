@@ -33,6 +33,17 @@ class modificationTarget(Enum):
     amp=0
     phase=1
 
+testFIR={
+    1:"tests\FIR test cases\Testcase 1\LPFCoefficients.txt",
+    2:"tests\FIR test cases\Testcase 2\ecg_low_pass_filtered.txt",
+    3:"tests\FIR test cases\Testcase 3\HPFCoefficients.txt",
+    4:"tests\FIR test cases\Testcase 4\ecg_high_pass_filtered.txt",
+    5:"tests\FIR test cases\Testcase 5\BPFCoefficients.txt",
+    6:"tests\FIR test cases\Testcase 6\ecg_band_pass_filtered.txt",
+    7:"tests\FIR test cases\Testcase 7\BSFCoefficients.txt",
+    8:"tests\FIR test cases\Testcase 8\ecg_band_stop_filtered.txt"
+}
+
 def addSignals():
     global signalList
     resultantSignal:SignalData=SignalData()
@@ -614,7 +625,7 @@ def foldSignal(signal:SignalData,write:bool=True):
 
     return resultantSignal
 
-def convolve(signal1:SignalData,signal2:SignalData,write:bool=True):
+def convolve(signal1:SignalData,signal2:SignalData,write:bool=True,test:bool=True):
     global signalCounter
     
     resultantSignal:SignalData = SignalData()
@@ -639,7 +650,8 @@ def convolve(signal1:SignalData,signal2:SignalData,write:bool=True):
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-        ConvTest(list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
+        if test:
+            ConvTest(list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
     
     return resultantSignal    
 
@@ -721,9 +733,12 @@ def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
 
     return resultantSignal
 
-def applyFilter(signal:SignalData,LoadedFilter:Filter,write:bool=True):
+def applyFilter(signal:SignalData,LoadedFilter:Filter,testCase:int,write:bool=True):
     global signalCounter
-    return convolve(signal,createFilterSignal(LoadedFilter,False),write)
+    resultantSignal:SignalData= convolve(signal,createFilterSignal(LoadedFilter,False),write,False)
+    fileName=testFIR[testCase]
+    Compare_Signals(fileName,list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
+    return resultantSignal
 
 rectangularAttenuation:Final = 21
 hanningAttenuation:Final = 44
@@ -735,7 +750,7 @@ hanningTransitionWidth:Final = 3.1
 hammingTransitionWidth:Final = 3.3
 blackmanTransitionWidth:Final = 5.5
 
-def createFilterSignal(LoadedFilter:Filter,write:bool=True):
+def createFilterSignal(LoadedFilter:Filter,testCase:int,write:bool=True):
     global signalCounter
 
     windowFuntion:callable
@@ -797,7 +812,9 @@ def createFilterSignal(LoadedFilter:Filter,write:bool=True):
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-        
+        fileName=testFIR[testCase]
+        Compare_Signals(fileName,list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
+    
     return resultantSignal
 
 # Window Functions========================================

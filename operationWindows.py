@@ -249,7 +249,8 @@ def createPeriodicCorrelationWindow():
 def createFIRwindow():
     FIRwindow = Toplevel()
     signalEntry = Entry(FIRwindow)
-    
+    testEntry = Entry(FIRwindow)
+
     # Store the filter object in a variable accessible to both functions
     pickedFilter = None
     
@@ -261,7 +262,7 @@ def createFIRwindow():
     def handleCreateFilterSignal():
         nonlocal pickedFilter
         if pickedFilter is not None:
-            createFilterSignal(pickedFilter)
+            createFilterSignal(pickedFilter,int(testEntry.get()))
     
     pickFilter = Button(
         FIRwindow,
@@ -273,7 +274,7 @@ def createFIRwindow():
     filterButton = Button(
         FIRwindow,
         text="Apply Filter",
-        command=lambda: applyFilter(targetSignals[int(signalEntry.get())],pickedFilter)
+        command=lambda: applyFilter(targetSignals[int(signalEntry.get())],pickedFilter,int(testEntry.get()))
     )
     
     filterSignalButton = Button(
@@ -284,5 +285,6 @@ def createFIRwindow():
     
     pickFilter.pack()
     signalEntry.pack()
+    testEntry.pack()
     filterSignalButton.pack()
     filterButton.pack()
