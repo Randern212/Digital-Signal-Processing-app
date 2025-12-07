@@ -251,12 +251,11 @@ def createFIRwindow():
     signalEntry = Entry(FIRwindow)
     testEntry = Entry(FIRwindow)
 
-    # Store the filter object in a variable accessible to both functions
     pickedFilter = None
     
     def handleSubmitFilter():
-        nonlocal pickedFilter  # Use nonlocal if this is nested in another function
-        pickedFilter = submitFilter()  # Assuming submitFilter returns the filter object
+        nonlocal pickedFilter  
+        pickedFilter = submitFilter() 
         return pickedFilter
     
     def handleCreateFilterSignal():
@@ -287,4 +286,40 @@ def createFIRwindow():
     signalEntry.pack()
     testEntry.pack()
     filterSignalButton.pack()
+    filterButton.pack()
+
+def createSamplingWindow():
+    FIRwindow = Toplevel()
+    signalEntry = Entry(FIRwindow)
+    # testEntry = Entry(FIRwindow)
+    entryL=Entry(FIRwindow)
+    entryM=Entry(FIRwindow)
+
+    pickedFilter = None
+    
+    def handleSubmitFilter():
+        nonlocal pickedFilter  
+        pickedFilter = submitFilter() 
+        return pickedFilter
+    
+    pickFilter = Button(
+        FIRwindow,
+        command=handleSubmitFilter,
+        text="Choose filter file",
+        font=("times new roman", 12)
+    )
+    
+    filterButton = Button(
+        FIRwindow,
+        text="Apply Filter",
+        command=lambda: sample(targetSignals[int(signalEntry.get())],pickedFilter,int(entryM.get()),int(entryL.get()))
+    )
+    
+
+    
+    pickFilter.pack()
+    signalEntry.pack()
+    entryL.pack()
+    entryM.pack()
+    # testEntry.pack()
     filterButton.pack()

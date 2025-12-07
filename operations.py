@@ -736,6 +736,7 @@ def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
 def applyFilter(signal:SignalData,LoadedFilter:Filter,testCase:int,write:bool=True):
     global signalCounter
     resultantSignal:SignalData = convolve(signal,createFilterSignal(LoadedFilter,0,False,False),write,False)
+    discreteRepresentation(resultantSignal)
     fileName=testFIR[testCase]
     Compare_Signals(fileName,list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
     return resultantSignal
@@ -853,3 +854,54 @@ def bandStopFiltering(n,fc,f1,f2,w,w1,w2):
         return 1-(2*(f2-f1))
     return (2*f1*(sin(n*w1)/(n*w1)))-(2*f2*(sin(n*w2)/(n*w2)))
 # =========================================================
+
+def sample(signal:SignalData,LoadedFilter:Filter,M,L,write:bool=True):
+    global signalCounter
+    if M==0 and L==0:
+        print("Invalid L and M")
+        return
+    elif M==0 and L!=0:
+        filteredSignal=signal
+        filteredSignal.data,filteredSignal.N1=upSample(signal.data,L)
+        filteredSignal=applyFilter(filteredSignal, LoadedFilter, 1, False)
+    elif M!=0 and L ==0:
+        filteredSignal:SignalData=applyFilter(signal,LoadedFilter,1,False)
+        filteredSignal.data, filteredSignal.N1=downSample(filteredSignal.data,M)
+    elif M!=0 and L!=0:
+        filteredSignal=signal
+        filteredSignal.data,filteredSignal.N1=upSample(signal.data,L)
+        filteredSignal=applyFilter(filteredSignal, LoadedFilter, 1, False)
+        filteredSignal.data, filteredSignal.N1=downSample(filteredSignal.data,M)
+
+    if write:
+        writeSignal(filteredSignal,signalCounter)
+        signalCounter+=1
+
+    
+def upSample(signal: dict, L):
+    indices = sorted(signal.keys())
+    resultantSignal = {}
+    counter = 0
+    
+    for i in indices:
+        sampledIndex = i * L
+        resultantSignal[sampledIndex] = signal[i]
+        if i != indices[-1]:
+            counter += (L - 1)
+    counter += (L - 1)
+    
+    return resultantSignal, counter
+
+def downSample(signal:dict,M):
+    indices = sorted(signal.keys())
+    sampledIndex=min(indices)
+
+    counter=0
+    resultantSignal={}
+    for i in indices:
+        if i==sampledIndex:
+            resultantSignal[sampledIndex-(counter*(M-1))]=signal[sampledIndex]
+            sampledIndex+=M
+            counter+=1
+
+    return resultantSignal,counter
