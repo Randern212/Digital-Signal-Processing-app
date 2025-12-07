@@ -13,3 +13,6 @@ def submitFile(skipFrequency:bool=False):
                                            filetypes=(("text files","*.txt"),("all files","*.*")))
     targetSignals[signalCounter]=readSignal(filePath=filePath, skipFrequency=skipFrequency)
     signalCounter+=1
+
+def readFilter():
+    pass

@@ -245,3 +245,18 @@ def createPeriodicCorrelationWindow():
     signalEntry2.pack()
 
     correlationButton.pack()
+
+def createFIRwindow():
+    FIRwindow:Toplevel=Toplevel()
+
+    signalEntry:Entry=Entry(FIRwindow)
+    pickFilter:Button=Button(FIRwindow,
+                          command= readFilter,
+                          text="Choose filter file",
+                            font=("times new roman", 12))
+    
+    filterButton:Button=Button(FIRwindow,text="Apply Filter",command=lambda:applyFilter(targetSignals[int(signalEntry.get())]))
+
+    pickFilter.pack()
+    signalEntry.pack()
+    filterButton.pack()

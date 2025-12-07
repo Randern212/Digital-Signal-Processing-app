@@ -313,7 +313,8 @@ def removeDcComponent(signal:SignalData, write:bool=True):
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-    
+        
+
     return resultantSignal
 
 def DFT(signal:SignalData,samplingFrequency:float,write:bool=True, plot:bool=True):
@@ -718,3 +719,7 @@ def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
     Compare_Signals("tests\Correlation (different length)\CorrOutput.txt",list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
 
     return resultantSignal
+
+def applyFilter(signal:SignalData,write:bool=True):
+    global signalCounter
+    pass
