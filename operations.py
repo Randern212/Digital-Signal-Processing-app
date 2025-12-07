@@ -864,18 +864,22 @@ def sample(signal:SignalData,LoadedFilter:Filter,M,L,write:bool=True):
         filteredSignal=signal
         filteredSignal.data,filteredSignal.N1=upSample(signal.data,L)
         filteredSignal=applyFilter(filteredSignal, LoadedFilter, 1, False)
+        fileName="tests\Sampling test cases\Testcase 2\Sampling_Up.txt"
     elif M!=0 and L ==0:
         filteredSignal:SignalData=applyFilter(signal,LoadedFilter,1,False)
         filteredSignal.data, filteredSignal.N1=downSample(filteredSignal.data,M)
+        fileName="tests\Sampling test cases\Testcase 1\Sampling_Down.txt"
     elif M!=0 and L!=0:
         filteredSignal=signal
         filteredSignal.data,filteredSignal.N1=upSample(signal.data,L)
         filteredSignal=applyFilter(filteredSignal, LoadedFilter, 1, False)
         filteredSignal.data, filteredSignal.N1=downSample(filteredSignal.data,M)
+        fileName="tests\Sampling test cases\Testcase 3\Sampling_Up_Down.txt"
 
     if write:
         writeSignal(filteredSignal,signalCounter)
         signalCounter+=1
+        Compare_Signals(fileName, list(filteredSignal.data.keys()), list(filteredSignal.data.values()))
 
     
 def upSample(signal: dict, L):

@@ -22,16 +22,16 @@ def Compare_Signals(file_name,Your_indices,Your_samples):
     print(file_name)
     print("\n")
     if (len(expected_samples)!=len(Your_samples)) and (len(expected_indices)!=len(Your_indices)):
-        print("Shift_Fold_Signal Test case failed, your signal have different length from the expected one")
+        print("Test case failed, your signal have different length from the expected one")
         return
     for i in range(len(Your_indices)):
         if(Your_indices[i]!=expected_indices[i]):
-            print("Shift_Fold_Signal Test case failed, your signal have different indicies from the expected one") 
+            print("Test case failed, your signal have different indicies from the expected one") 
             return
     for i in range(len(expected_samples)):
         if abs(Your_samples[i] - expected_samples[i]) < 0.01:
             continue
         else:
-            print("Correlation Test case failed, your signal have different values from the expected one") 
+            print("Test case failed, your signal have different values from the expected one") 
             return
-    print("Correlation Test case passed successfully")
+    print("Test case passed successfully")
