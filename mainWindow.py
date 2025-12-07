@@ -50,7 +50,7 @@ timeMenu.add_command(label="Convolution",command=createConvolutionWindow)
 timeMenu.add_command(label="Correlation",command=createCorrelationWindow)
 timeMenu.add_command(label="Autocorrelation",command=createAutocorrelationWindow)
 timeMenu.add_command(label="Periodic Correlation",command=createPeriodicCorrelationWindow)
-timeMenu.add_command(label="FIR Filtering",command=createFIRwindow())
+timeMenu.add_command(label="FIR Filtering",command=createFIRwindow)
 
 #==============================================================================
 
