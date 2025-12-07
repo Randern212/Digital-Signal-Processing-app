@@ -736,8 +736,9 @@ hanningTransitionWidth:Final = 3.1
 hammingTransitionWidth:Final = 3.3
 blackmanTransitionWidth:Final = 5.5
 
-def createFilterSignal():
+def createFilterSignal(write:bool=True):
     global LoadedFilter
+    global signalCounter
 
     windowFuntion:callable
     filterFunction:callable
@@ -756,6 +757,15 @@ def createFilterSignal():
         windowFuntion=blackman
         transitionWidth=blackmanTransitionWidth
     
+    windowLength = math.ceil(transitionWidth/(LoadedFilter.transitionBand/LoadedFilter.FS))
+    
+    if windowLength%2==0:
+        windowLength+=1
+    
+    wc=2*pi*LoadedFilter.FC
+    w1=2*pi*LoadedFilter.F1
+    w2=2*pi*LoadedFilter.F2
+
     match LoadedFilter.filterType:
         case FilterType.LOW:
             filterFunction=lowPassFiltering
@@ -766,6 +776,21 @@ def createFilterSignal():
         case FilterType.BAND_STOP:
             filterFunction=bandStopFiltering
     
+    windowRange=range(-(windowLength-1)/2, (windowLength-1)/2)
+
+    resultantSignal:SignalData=SignalData()
+    resultantSignal.SignalType=0
+    resultantSignal.IsPeriodic=0
+    resultantSignal.N1==windowLength
+    
+    for n in windowRange:
+        resultantSignal.data[n]=filterFunction(n, LoadedFilter.FC, LoadedFilter.F1, LoadedFilter.F2, wc, w1, w2)*windowFuntion(n, windowLength)
+
+    if write:
+        writeSignal(resultantSignal,signalCounter)
+        signalCounter+=1
+        
+    return resultantSignal
 
 # Window Functions========================================
 def rectangular(n,N):
@@ -782,22 +807,22 @@ def blackman(n,N):
 # =========================================================
 
 # Filter Functions========================================
-def lowPassFiltering(n,fc,w):
+def lowPassFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
         return 2*fc
     return 2*fc*(sin(n*w)/n*w)
 
-def highPassFiltering(n,fc,w):
+def highPassFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
         return 1 - 2*fc
     return -2*fc*(sin(n*w)/n*w)
 
-def bandPassFiltering(n,f1,f2,w1,w2):
+def bandPassFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
         return 2(f2-f1)
     return 2*f2*(sin(n*w2)/n*w2)-2*f1*(sin(n*w1)/n*w1)
 
-def bandStopFiltering(n,f1,f2,w1,w2):
+def bandStopFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
         return 1-2(f2-f1)
     return 2*f1*(sin(n*w1)/n*w1)-2*f2*(sin(n*w2)/n*w2)
