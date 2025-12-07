@@ -744,13 +744,13 @@ def createFilterSignal(LoadedFilter,write:bool=True):
     filterFunction:callable
     transitionWidth:float
 
-    if LoadedFilter.stopBandAttenuation >= rectangularAttenuation:
+    if LoadedFilter.stopBandAttenuation <= rectangularAttenuation:
         windowFuntion=rectangular
         transitionWidth=rectangularTransitionWidth
-    elif LoadedFilter.stopBandAttenuation >= hanningAttenuation:
+    elif LoadedFilter.stopBandAttenuation <= hanningAttenuation:
         windowFuntion=hanning
         transitionWidth=hanningTransitionWidth
-    elif LoadedFilter.stopBandAttenuation >= hammingAttenuation:
+    elif LoadedFilter.stopBandAttenuation <= hammingAttenuation:
         windowFuntion=hamming
         transitionWidth=hammingTransitionWidth
     else:
@@ -761,11 +761,11 @@ def createFilterSignal(LoadedFilter,write:bool=True):
     
     if windowLength%2==0:
         windowLength+=1
-    
-    wc=2*pi*LoadedFilter.FC
-    w1=2*pi*LoadedFilter.F1
-    w2=2*pi*LoadedFilter.F2
 
+    wc=(2*pi*LoadedFilter.FC)/LoadedFilter.FS
+    w1=(2*pi*LoadedFilter.F1)/LoadedFilter.FS
+    w2=(2*pi*LoadedFilter.F2)/LoadedFilter.FS
+    
     match LoadedFilter.filterType:
         case FilterType.LOW:
             filterFunction=lowPassFiltering
@@ -784,7 +784,7 @@ def createFilterSignal(LoadedFilter,write:bool=True):
     resultantSignal.N1=windowLength
     
     for n in windowRange:
-        resultantSignal.data[n]=filterFunction(n, LoadedFilter.FC, LoadedFilter.F1, LoadedFilter.F2, wc, w1, w2)*windowFuntion(n, windowLength)
+        resultantSignal.data[n]=(filterFunction(n, LoadedFilter.FC, LoadedFilter.F1, LoadedFilter.F2, wc, w1, w2)*windowFuntion(n, windowLength)).real
 
     if write:
         writeSignal(resultantSignal,signalCounter)
