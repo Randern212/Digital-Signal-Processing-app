@@ -7,6 +7,7 @@ from QuantizedSignal import *
 from plotFunctions import *
 from cmath import *
 from collections import deque
+from typing import Final
 
 #TESTING MODULES=====================================================================
 from ConvTest import *
@@ -725,11 +726,51 @@ def applyFilter(signal:SignalData,write:bool=True):
     global LoadedFilter
     pass
 
+rectangularAttenuation:Final = 21
+hanningAttenuation:Final = 44
+hammingAttenuation:Final = 53
+blackmanAttenuation:Final = 74
+
+rectangularTransitionWidth:Final = 0.9
+hanningTransitionWidth:Final = 3.1
+hammingTransitionWidth:Final = 3.3
+blackmanTransitionWidth:Final = 5.5
+
 def createFilterSignal():
     global LoadedFilter
 
-    pass
+    windowFuntion:callable
+    filterFunction:callable
+    transitionWidth:float
+
+    if LoadedFilter.stopBandAttenuation >= rectangularAttenuation:
+        windowFuntion=rectangular
+        transitionWidth=rectangularTransitionWidth
+    elif LoadedFilter.stopBandAttenuation >= hanningAttenuation:
+        windowFuntion=hanning
+        transitionWidth=hanningTransitionWidth
+    elif LoadedFilter.stopBandAttenuation >= hammingAttenuation:
+        windowFuntion=hamming
+        transitionWidth=hammingTransitionWidth
+    else:
+        windowFuntion=blackman
+        transitionWidth=blackmanTransitionWidth
+    
+    match LoadedFilter.filterType:
+        case FilterType.LOW:
+            filterFunction=lowPassFiltering
+        case FilterType.HIGH:
+            filterFunction=highPassFiltering
+        case FilterType.BAND_PASS:
+            filterFunction=bandPassFiltering
+        case FilterType.BAND_STOP:
+            filterFunction=bandStopFiltering
+    
+
 # Window Functions========================================
+def rectangular(n,N):
+    return 1
+
 def hanning(n,N):
     return 0.5+0.5*cos((2*pi*n)/N)
 
@@ -738,9 +779,6 @@ def hamming(n,N):
 
 def blackman(n,N):
     return 0.42+0.5*cos((2*pi*n)/(N-1))+0.08*cos((4*pi*n)/(N-1))
-
-def rectangular(n,N):
-    return 1
 # =========================================================
 
 # Filter Functions========================================
