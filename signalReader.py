@@ -6,6 +6,12 @@ class WriteMethod(Enum):
     quantizedBits=1
     quantizedLevels=2
 
+class FilterType(Enum):
+    LOW = "low pass"
+    HIGH = "high pass"
+    BAND_PASS = "band pass"
+    BAND_STOP = "band stop"
+
 def readSignal(filePath:str,skipFrequency:bool=False)->SignalData:
     returnSignal:SignalData = SignalData()
 
@@ -71,3 +77,29 @@ def writeModeQuantizedLevels(signal, signalFile, numberOfBits:int):
             encodedLevel=format(level,'#0'+str(numberOfBits+2)+'b')[2:]
             signalFile.write(f"{level+1} {encodedLevel} {amplitude} {signal.error[i]}\n")
             i+=1
+
+def readFilter(filePath:str):
+    filterTypeMap = {
+        "low pass": FilterType.LOW,
+        "high pass": FilterType.HIGH,
+        "band pass": FilterType.BAND_PASS,
+        "band stop": FilterType.BAND_STOP,
+    }
+    with open(filePath) as f:
+        lines = [line.strip().split('=') for line in f if '=' in line]
+        parameters = {k.strip(): v.strip() for k, v in lines}
+    
+    fs = int(parameters['FS'])
+    stopBandAttenuation = int(parameters['StopBandAttenuation'])
+    transitionBand = int(parameters['TransitionBand'])
+
+    filterType=filterTypeMap[parameters['FilterType'].lower()]
+    
+    if filterType==FilterType.BAND_PASS or filterType==FilterType.BAND_STOP:
+        f1 = float(parameters['F1'])
+        f2 = float(parameters['F2'])
+        return filterType, fs, stopBandAttenuation, (f1 ,f2), transitionBand
+    
+    fc= float(parameters['FC'])
+
+    return filterType, fs, stopBandAttenuation, fc, transitionBand

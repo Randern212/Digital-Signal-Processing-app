@@ -14,5 +14,8 @@ def submitFile(skipFrequency:bool=False):
     targetSignals[signalCounter]=readSignal(filePath=filePath, skipFrequency=skipFrequency)
     signalCounter+=1
 
-def readFilter():
-    pass
+def submitFilter():
+    filePath = filedialog.askopenfilename(title="pick a signal file",
+                                           filetypes=(("text files","*.txt"),("all files","*.*")))
+    
+    filterType, fs, stopBandAttenuation, fc, transitionBand=readFilter(filePath) 
