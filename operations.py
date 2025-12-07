@@ -773,13 +773,17 @@ def createFilterSignal(LoadedFilter:Filter,write:bool=True):
             LoadedFilter.FC-=(LoadedFilter.transitionBand/2)
             filterFunction=highPassFiltering
         case FilterType.BAND_PASS:
+            LoadedFilter.F1-=(LoadedFilter.transitionBand/2)
+            LoadedFilter.F2+=(LoadedFilter.transitionBand/2)
             filterFunction=bandPassFiltering
         case FilterType.BAND_STOP:
+            LoadedFilter.F1+=(LoadedFilter.transitionBand/2)
+            LoadedFilter.F2-=(LoadedFilter.transitionBand/2)
             filterFunction=bandStopFiltering
 
     LoadedFilter.FC/=LoadedFilter.FS
     LoadedFilter.F1/=LoadedFilter.FS
-    LoadedFilter.F2/LoadedFilter.FS
+    LoadedFilter.F2/=LoadedFilter.FS
 
     wc=(2*pi*LoadedFilter.FC)
     w1=(2*pi*LoadedFilter.F1)
@@ -829,10 +833,10 @@ def highPassFiltering(n,fc,f1,f2,w,w1,w2):
 def bandPassFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
         return 2*(f2-f1)
-    return 2*f2*(sin(n*w2)/(n*w2))-2*f1*(sin(n*w1)/(n*w1))
+    return (2*f2*(sin(n*w2)/(n*w2)))-(2*f1*(sin(n*w1)/(n*w1)))
 
 def bandStopFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
-        return 1-2*(f2-f1)
-    return 2*f1*(sin(n*w1)/(n*w1))-2*f2*(sin(n*w2)/(n*w2))
+        return 1-(2*(f2-f1))
+    return (2*f1*(sin(n*w1)/(n*w1)))-(2*f2*(sin(n*w2)/(n*w2)))
 # =========================================================
