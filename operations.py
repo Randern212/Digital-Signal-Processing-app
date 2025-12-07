@@ -727,4 +727,40 @@ def applyFilter(signal:SignalData,write:bool=True):
 
 def createFilterSignal():
     global LoadedFilter
+
     pass
+# Window Functions========================================
+def hanning(n,N):
+    return 0.5+0.5*cos((2*pi*n)/N)
+
+def hamming(n,N):
+    return 0.54+0.46*cos((2*pi*n)/N)
+
+def blackman(n,N):
+    return 0.42+0.5*cos((2*pi*n)/(N-1))+0.08*cos((4*pi*n)/(N-1))
+
+def rectangular(n,N):
+    return 1
+# =========================================================
+
+# Filter Functions========================================
+def lowPassFiltering(n,fc,w):
+    if n==0:
+        return 2*fc
+    return 2*fc*(sin(n*w)/n*w)
+
+def highPassFiltering(n,fc,w):
+    if n==0:
+        return 1 - 2*fc
+    return -2*fc*(sin(n*w)/n*w)
+
+def bandPassFiltering(n,f1,f2,w1,w2):
+    if n==0:
+        return 2(f2-f1)
+    return 2*f2*(sin(n*w2)/n*w2)-2*f1*(sin(n*w1)/n*w1)
+
+def bandStopFiltering(n,f1,f2,w1,w2):
+    if n==0:
+        return 1-2(f2-f1)
+    return 2*f1*(sin(n*w1)/n*w1)-2*f2*(sin(n*w2)/n*w2)
+# =========================================================

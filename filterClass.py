@@ -1,10 +1,10 @@
 from enum import *
 
 class FilterType(Enum):
-    LOW = "low pass"
-    HIGH = "high pass"
-    BAND_PASS = "band pass"
-    BAND_STOP = "band stop"
+    LOW = 0
+    HIGH = 1
+    BAND_PASS = 2
+    BAND_STOP = 3
 
 class Filter:
     def __init__(self):
