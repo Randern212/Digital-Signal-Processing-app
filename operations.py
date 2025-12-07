@@ -735,7 +735,7 @@ def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
 
 def applyFilter(signal:SignalData,LoadedFilter:Filter,testCase:int,write:bool=True):
     global signalCounter
-    resultantSignal:SignalData= convolve(signal,createFilterSignal(LoadedFilter,False),write,False)
+    resultantSignal:SignalData = convolve(signal,createFilterSignal(LoadedFilter,0,False,False),write,False)
     fileName=testFIR[testCase]
     Compare_Signals(fileName,list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
     return resultantSignal
@@ -750,7 +750,7 @@ hanningTransitionWidth:Final = 3.1
 hammingTransitionWidth:Final = 3.3
 blackmanTransitionWidth:Final = 5.5
 
-def createFilterSignal(LoadedFilter:Filter,testCase:int,write:bool=True):
+def createFilterSignal(LoadedFilter:Filter,testCase:int,write:bool=True,test:bool=True):
     global signalCounter
 
     windowFuntion:callable
@@ -812,8 +812,9 @@ def createFilterSignal(LoadedFilter:Filter,testCase:int,write:bool=True):
     if write:
         writeSignal(resultantSignal,signalCounter)
         signalCounter+=1
-        fileName=testFIR[testCase]
-        Compare_Signals(fileName,list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
+        if test:
+            fileName=testFIR[testCase]
+            Compare_Signals(fileName,list(resultantSignal.data.keys()),list(resultantSignal.data.values()))
     
     return resultantSignal
 
