@@ -721,10 +721,9 @@ def periodicCorrelate(signal1:SignalData,signal2:SignalData,write:bool=True):
 
     return resultantSignal
 
-def applyFilter(signal:SignalData,write:bool=True):
+def applyFilter(signal:SignalData,LoadedFilter:Filter,write:bool=True):
     global signalCounter
-    global LoadedFilter
-    pass
+    return convolve(signal,createFilterSignal(LoadedFilter,False),write)
 
 rectangularAttenuation:Final = 21
 hanningAttenuation:Final = 44
@@ -738,10 +737,6 @@ blackmanTransitionWidth:Final = 5.5
 
 def createFilterSignal(LoadedFilter:Filter,write:bool=True):
     global signalCounter
-
-    # LoadedFilter.F1+=(LoadedFilter.transitionBand/2)
-    # LoadedFilter.F2+=(LoadedFilter.transitionBand/2)
-
 
     windowFuntion:callable
     filterFunction:callable

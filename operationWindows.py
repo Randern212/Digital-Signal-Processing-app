@@ -273,7 +273,7 @@ def createFIRwindow():
     filterButton = Button(
         FIRwindow,
         text="Apply Filter",
-        command=lambda: applyFilter(targetSignals[int(signalEntry.get())])
+        command=lambda: applyFilter(targetSignals[int(signalEntry.get())],pickedFilter)
     )
     
     filterSignalButton = Button(
