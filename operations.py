@@ -736,8 +736,11 @@ hanningTransitionWidth:Final = 3.1
 hammingTransitionWidth:Final = 3.3
 blackmanTransitionWidth:Final = 5.5
 
-def createFilterSignal(LoadedFilter,write:bool=True):
+def createFilterSignal(LoadedFilter:Filter,write:bool=True):
     global signalCounter
+
+    # LoadedFilter.F1+=(LoadedFilter.transitionBand/2)
+    # LoadedFilter.F2+=(LoadedFilter.transitionBand/2)
 
 
     windowFuntion:callable
@@ -762,21 +765,27 @@ def createFilterSignal(LoadedFilter,write:bool=True):
     if windowLength%2==0:
         windowLength+=1
 
-    wc=(2*pi*LoadedFilter.FC)/LoadedFilter.FS
-    w1=(2*pi*LoadedFilter.F1)/LoadedFilter.FS
-    w2=(2*pi*LoadedFilter.F2)/LoadedFilter.FS
-    
     match LoadedFilter.filterType:
         case FilterType.LOW:
+            LoadedFilter.FC+=(LoadedFilter.transitionBand/2)
             filterFunction=lowPassFiltering
         case FilterType.HIGH:
+            LoadedFilter.FC-=(LoadedFilter.transitionBand/2)
             filterFunction=highPassFiltering
         case FilterType.BAND_PASS:
             filterFunction=bandPassFiltering
         case FilterType.BAND_STOP:
             filterFunction=bandStopFiltering
 
-    windowRange=range(int(-(windowLength-1)/2), int((windowLength-1)/2))
+    LoadedFilter.FC/=LoadedFilter.FS
+    LoadedFilter.F1/=LoadedFilter.FS
+    LoadedFilter.F2/LoadedFilter.FS
+
+    wc=(2*pi*LoadedFilter.FC)
+    w1=(2*pi*LoadedFilter.F1)
+    w2=(2*pi*LoadedFilter.F2)
+    
+    windowRange=range(int(-(windowLength-1)/2), int((windowLength-1)/2)+1)
 
     resultantSignal:SignalData=SignalData()
     resultantSignal.SignalType=0
@@ -797,33 +806,33 @@ def rectangular(n,N):
     return 1
 
 def hanning(n,N):
-    return 0.5+0.5*cos((2*pi*n)/N)
+    return 0.5+(0.5*cos((2*pi*n)/N))
 
 def hamming(n,N):
-    return 0.54+0.46*cos((2*pi*n)/N)
+    return 0.54+(0.46*cos((2*pi*n)/N))
 
 def blackman(n,N):
-    return 0.42+0.5*cos((2*pi*n)/(N-1))+0.08*cos((4*pi*n)/(N-1))
+    return 0.42+(0.5*cos((2*pi*n)/(N-1)))+(0.08*cos((4*pi*n)/(N-1)))
 # =========================================================
 
 # Filter Functions========================================
 def lowPassFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
         return 2*fc
-    return 2*fc*(sin(n*w)/n*w)
+    return 2*fc*(sin(n*w)/(n*w))
 
 def highPassFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
-        return 1 - 2*fc
-    return -2*fc*(sin(n*w)/n*w)
+        return 1 - (2*fc)
+    return -2*fc*(sin(n*w)/(n*w))
 
 def bandPassFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
         return 2*(f2-f1)
-    return 2*f2*(sin(n*w2)/n*w2)-2*f1*(sin(n*w1)/n*w1)
+    return 2*f2*(sin(n*w2)/(n*w2))-2*f1*(sin(n*w1)/(n*w1))
 
 def bandStopFiltering(n,fc,f1,f2,w,w1,w2):
     if n==0:
         return 1-2*(f2-f1)
-    return 2*f1*(sin(n*w1)/n*w1)-2*f2*(sin(n*w2)/n*w2)
+    return 2*f1*(sin(n*w1)/(n*w1))-2*f2*(sin(n*w2)/(n*w2))
 # =========================================================
